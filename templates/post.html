@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+{% if session ['user_name']%}
+
+Welcome {{session ['user_name']}}...! <br />
+
+{% else%}
+
+You are not login. Click here for <a href="{{ url\\\_for('register') }}">Register</a>
+
+or <a href="{{ url\\\_for('login') }}">Login</a>
+
+{% endif%}
+
+{% endblock%}
