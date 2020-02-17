@@ -6,11 +6,22 @@ from flask import Flask, render_template, request
 
 
 app = Flask(__name__)
-
-app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:postgres1@localhost/DataCollector'  #  'sqlite:///blog.db'
 db = SQLAlchemy(app)
+app.config['SECRET_KEY'] = ''
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+db.init_app(app)
 
-# 1 create a table for comments 
+
+# blueprint for auth routes in our app
+from .auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint)
+
+# blueprint for non-auth parts of app
+from .main import main as main_blueprint
+app.register_blueprint(main_blueprint)
+
+
+# create a table for comments 
 class CommentPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))
@@ -20,7 +31,7 @@ class CommentPost(db.Model):
     content = db.Column(db.Text)
     
 
-# 2 create a table for comments
+# create a table(other way) for comments
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
