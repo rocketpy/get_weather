@@ -5,22 +5,25 @@ from flask import Flask, render_template, request
 #from flask.ext.sqlalchemy import SQLAlchemy
 
 
-app = Flask(__name__)
 db = SQLAlchemy(app)
-app.config['SECRET_KEY'] = ''
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-db.init_app(app)
 
+def create_app():
+    app = Flask(__name__)
+    #app.config['SECRET_KEY'] = ''
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    db.init_app(app)
+    
+    # for auth routes
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint)
 
-# blueprint for auth routes in our app
-from .auth import auth as auth_blueprint
-app.register_blueprint(auth_blueprint)
+    # for non-auth 
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
 
-# blueprint for non-auth parts of app
-from .main import main as main_blueprint
-app.register_blueprint(main_blueprint)
+    return app
 
-
+"""
 # create a table for comments 
 class CommentPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,14 +33,13 @@ class CommentPost(db.Model):
     date_posted = db.Column(db.DateTime)
     content = db.Column(db.Text)
     
-
 # create a table(other way) for comments
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
-
+"""
 """    
 class Data(db.Model):
     __tablename__ = "data"
@@ -53,7 +55,7 @@ class Data(db.Model):
         self.shoesize = shoesize
         self.sex = sex
 """
-
+"""
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -74,4 +76,4 @@ def success():
 
 if (__name__ =="__main__"):
     app.run(debug=True)
-
+"""
