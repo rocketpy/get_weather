@@ -1,8 +1,8 @@
-"""
+
 import json
 import urllib.request
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 #from flask.ext.sqlalchemy import SQLAlchemy
 
 
@@ -23,7 +23,7 @@ def create_app():
     app.register_blueprint(main_blueprint)
 
     return app
-"""
+
 """
 # create a table for comments 
 class CommentPost(db.Model):
@@ -74,7 +74,7 @@ def posts(post_id):
 def success():
     return render_template("success.html")
 
-
+"""
 if (__name__ =="__main__"):
     app.run(debug=True)
-"""
+
