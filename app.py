@@ -5,9 +5,22 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template, request, redirect
 #from flask.ext.sqlalchemy import SQLAlchemy
 
-
+app = Flask(__name__)
 db = SQLAlchemy(app)
 
+#app.config['SECRET_KEY'] = ''
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+db.init_app(app)
+    
+# for auth routes
+from .auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint)
+
+# for non-auth 
+from .main import main as main_blueprint
+app.register_blueprint(main_blueprint)
+
+"""
 def create_app():
     app = Flask(__name__)
     #app.config['SECRET_KEY'] = ''
@@ -23,7 +36,7 @@ def create_app():
     app.register_blueprint(main_blueprint)
 
     return app
-
+"""
 """
 # create a table for comments 
 class CommentPost(db.Model):
