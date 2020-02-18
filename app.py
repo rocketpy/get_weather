@@ -1,3 +1,4 @@
+"""
 import json
 import urllib.request
 from flask_sqlalchemy import SQLAlchemy
@@ -22,7 +23,7 @@ def create_app():
     app.register_blueprint(main_blueprint)
 
     return app
-
+"""
 """
 # create a table for comments 
 class CommentPost(db.Model):
