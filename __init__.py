@@ -1,3 +1,4 @@
+"""
 import json
 import urllib.request
 from flask import Flask__,  render_template, request
@@ -21,3 +22,4 @@ def create_app():
     app.register_blueprint(main_blueprint)
 
     return app
+    """
