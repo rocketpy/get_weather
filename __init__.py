@@ -1,11 +1,9 @@
-"""
-import json
-import urllib.request
-from flask import Flask__,  render_template, request
+from flask import Flask,  render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
 
 db = SQLAlchemy()
+
 
 def create_app():
     app = Flask(__name__)
@@ -22,4 +20,4 @@ def create_app():
     app.register_blueprint(main_blueprint)
 
     return app
-    """
+
