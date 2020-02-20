@@ -9,6 +9,7 @@ def create_app():
     app = Flask(__name__)
     # app.config['SECRET_KEY'] = ''
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+
     db.init_app(app)
 
     # for auth routes
