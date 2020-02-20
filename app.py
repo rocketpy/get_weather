@@ -1,4 +1,4 @@
-
+"""
 import json
 import urllib.request
 from flask_sqlalchemy import SQLAlchemy
@@ -20,7 +20,6 @@ app.register_blueprint(auth_blueprint)
 from .main import main as main_blueprint
 app.register_blueprint(main_blueprint)
 
-"""
 def create_app():
     app = Flask(__name__)
     #app.config['SECRET_KEY'] = ''
@@ -87,7 +86,8 @@ def posts(post_id):
 def success():
     return render_template("success.html")
 
-"""
+
 if (__name__ =="__main__"):
     app.run(debug=True)
 
+"""
