@@ -7,6 +7,7 @@ from .auth import auth as auth_blueprint
 app = Flask(__name__)
 db = SQLAlchemy(app)
 # app.config['SECRET_KEY'] = ''
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db.init_app(app)
 
@@ -18,7 +19,7 @@ app.register_blueprint(main_blueprint)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
 
 """
