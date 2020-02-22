@@ -42,8 +42,10 @@ def signup_post():
 
 
 @auth.route('/logout')
+@login_required
 def logout():
-    return render_template('logout.html')
+    logout_user()
+    return redirect(url_for('main.index'))
 
 
 @auth.route('/login', methods=['POST'])
