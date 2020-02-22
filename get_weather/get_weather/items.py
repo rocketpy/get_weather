@@ -9,6 +9,6 @@ import scrapy
 
 
 class GetWeatherItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    night_temperature = scrapy.Field()
+    day_temperature = scrapy.Field()
+

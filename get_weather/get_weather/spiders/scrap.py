@@ -8,8 +8,8 @@ class MySpider(scrapy.Spider):
     def parse(self, response):
         for item in response.css('div.values'):
             items = {
-                'night temperature': response.css('span.unit unit_temperature_c::text')[0].extract(),
-                'day temperature': response.css('span.unit unit_temperature_c::text')[1].extract()
+                'night_temperature': response.css('span.unit unit_temperature_c::text')[0].extract(),
+                'day_temperature': response.css('span.unit unit_temperature_c::text')[1].extract()
                     }
             yield items
 
