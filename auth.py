@@ -52,7 +52,8 @@ def logout():
 
 class LoginForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(message='An email is required !')])
-    password = PasswordField('password', validators=[InputRequired(message='A password is required !')])
+    password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
+                                                     Length(max=100, message='Not greater a 100')])
 
 
 @auth.route('/login', methods=['POST'])
