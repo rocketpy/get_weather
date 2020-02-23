@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, InputRequired, Length
 from .models import User
 from .weather import db
 
@@ -48,6 +48,11 @@ def signup_post():
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
+
+
+class LoginForm(FlaskForm):
+    email = StringField('email', validators=[InputRequired(message='An email is required !')])
+    password = PasswordField('password', validators=[InputRequired(message='A password is required !')])
 
 
 @auth.route('/login', methods=['POST'])
