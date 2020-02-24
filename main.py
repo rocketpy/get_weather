@@ -5,6 +5,7 @@ from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from wtforms.validators import DataRequired
 from .weather import db
 from .models import UserPost
+from datetime import datetime
 
 
 main = Blueprint('main', __name__)
@@ -24,11 +25,13 @@ def profile():
 @main.route('/add', methods=['POST'])
 @login_required
 def addpost():
+    name = request.form['name']
+    email = request.form['email']
     title = request.form['title']
-    author = request.form['author']
-    content = request.form['content']
+    date_posted = request.form['date_posted']
+    message = request.form['message']
 
-    post = UserPost(title=title, subtitle=subtitle, author=author, content=content, date_posted=datetime.now())
+    post = UserPost(name=name, email=email, title=title, date_posted=datetime.now(), message=message)
     db.session.add(post)
     db.session.commit()
 
