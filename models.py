@@ -6,8 +6,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     name = db.Column(db.String(20))
     surname = db.Column(db.String(20))
-    sex = db.Column(db.String(20))
+    sex = db.Column(db.String(10))
     email = db.Column(db.String(50), unique=True)
+    birthday = db.Column(db.DateTime)
     password = db.Column(db.String(50))
 
 
@@ -17,5 +18,5 @@ class UserPost(db.Model):
     email = db.Column(db.String(50))
     title = db.Column(db.String(50))
     date_posted = db.Column(db.DateTime)
-    content = db.Column(db.Text)
+    message = db.Column(db.Text)
 
