@@ -4,11 +4,11 @@ from flask_login import login_user, logout_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from wtforms.validators import DataRequired, InputRequired, Length
-from get_weather.models import User
-from get_weather.weather import db
+from .models import User
+from .weather import db
 
 
-auth = Blueprint('auth', __name__)
+auth = Blueprint('auth', __name__, template_folder='templates')
 
 
 @auth.route('/login')

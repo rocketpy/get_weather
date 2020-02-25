@@ -1,8 +1,8 @@
-from flask import Flask, Blueprint,  render_template, request
+from flask import Flask  # Blueprint,  render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from get_weather.main import main as main_blueprint
-from get_weather.auth import auth as auth_blueprint
-from get_weather.models import User, UserPost
+from .main import main as main_blueprint
+from .auth import auth as auth_blueprint
+from .models import User, UserPost
 from flask_login import LoginManager
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
