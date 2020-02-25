@@ -3,8 +3,8 @@ from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from wtforms.validators import DataRequired
-from .weather import db
-from .models import UserPost
+from get_weather.weather import db
+from get_weather.models import UserPost
 from datetime import datetime
 
 
