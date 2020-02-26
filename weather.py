@@ -1,7 +1,7 @@
 from flask import Flask  # Blueprint,  render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from .main import main as main_blueprint
-from .auth import auth as auth_blueprint
+from .blue_prints.main import main as main_blueprint
+from .blue_prints.auth import auth as auth_blueprint
 from .models import User, UserPost
 from flask_login import LoginManager
 from flask_admin import Admin
