@@ -1,4 +1,5 @@
-from flask import Flask,  # Blueprint,  render_template, request
+import os
+from flask import Flask, Blueprint,  render_template, request, current_app
 from flask_sqlalchemy import SQLAlchemy
 from .main import main as main_blueprint
 from .auth import auth as auth_blueprint
