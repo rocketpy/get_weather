@@ -3,9 +3,8 @@ from flask_login import login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 from wtforms.validators import DataRequired
-from get_weather.weather import db
 from get_weather.models import UserPost
-from datetime import datetime
+from get_weather.weather import db
 
 
 main = Blueprint('main', __name__, template_folder='templates')
@@ -28,7 +27,6 @@ def addpost():
     name = request.form['name']
     email = request.form['email']
     title = request.form['title']
-    #date_posted = request.form['date_posted']
     message = request.form['message']
 
     post = UserPost(name=name, email=email, title=title, message=message)
