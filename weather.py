@@ -1,8 +1,8 @@
 import os
 from flask import Flask, Blueprint,  render_template, request, current_app
 from flask_sqlalchemy import SQLAlchemy
-from .main import main as main_blueprint
-from .auth import auth as auth_blueprint
+from .main.main import main as main_blueprint
+from .auth.auth import auth as auth_blueprint
 from .models import User, UserPost
 from flask_login import LoginManager
 from flask_admin import Admin

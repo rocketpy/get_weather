@@ -16,7 +16,5 @@ class UserPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     email = db.Column(db.String(50))
-    title = db.Column(db.String(50))
-    date_posted = db.Column(db.DateTime)
     message = db.Column(db.Text)
 
