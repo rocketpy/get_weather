@@ -2,10 +2,10 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required
 from flask_wtf import FlaskForm
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
-from wtforms.validators import DataRequired, InputRequired, Length
+from wtforms import StringField, PasswordField
+from wtforms.validators import InputRequired, Length, DataRequired
 from get_weather.weather import db
-from get_weather.models import User, UserPost
+from get_weather.models.models import User
 
 
 auth = Blueprint('auth', __name__, template_folder='templates')
