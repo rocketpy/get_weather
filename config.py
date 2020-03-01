@@ -1,3 +1,3 @@
 DEBUG = True
-SQLALCHEMY_DATABASE_URI = 'sqlite:////C:/Users/admin/PycharmProjects/get_weather/get_weather/database.db'
+SQLALCHEMY_DATABASE_URI = 'sqlite:////C:/'
 SECRET_KEY = 'Secret_key'

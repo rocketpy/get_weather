@@ -17,7 +17,6 @@ app = Flask(__name__)
 # app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 admin = Admin(app)
-db.init_app(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////db.sqlite'
 db.init_app(app)
 
@@ -39,7 +38,7 @@ class UserPost(db.Model):
     email = db.Column(db.String(50))
     message = db.Column(db.Text)
 
-
+# db.init_app(app)
 # from .project.main.main import main as main_blueprint
 # main = Blueprint('main', __name__, template_folder='templates')
 
@@ -73,7 +72,7 @@ def add_post():
     return redirect(url_for('index'))
 
 # from .project.auth.auth import auth as auth_blueprint
-#auth = Blueprint('auth', __name__, template_folder='templates')
+# auth = Blueprint('auth', __name__, template_folder='templates')
 
 
 @app.route('/login')
