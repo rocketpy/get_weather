@@ -1,3 +1,5 @@
+db
+admin
 __pycache__/*
-get_weather/get_weather/__pycache__/*
-get_weather/auth/__pycache__/*
+project/get_weather/get_weather/__pycache__/*
+project/get_weather/auth/__pycache__/*
