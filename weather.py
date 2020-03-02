@@ -69,12 +69,12 @@ def add_post():
     post = UserPost(name=name, email=email, message=message)
     db.session.add(post)
     db.session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('index.html'))
 
 # from .project.auth.auth import auth as auth_blueprint
 # auth = Blueprint('auth', __name__, template_folder='templates')
 
-
+"""
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -83,6 +83,7 @@ def login():
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
+"""
 
 
 @app.route('/signup', methods=['POST'])
@@ -95,7 +96,7 @@ def signup_post():
 
     if user:  # redirect back to signup page
         flash('Email address already exists')
-        return redirect(url_for('auth.signup'))
+        return redirect(url_for('signup.html'))
 
     # create new user
     new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
@@ -104,14 +105,14 @@ def signup_post():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for('app.login'))
+    return redirect(url_for('login.html'))
 
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('app.index'))
+    return redirect(url_for('index.html'))
 
 
 class LoginForm(FlaskForm):
@@ -130,9 +131,9 @@ def login_post():
 
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('login.html'))
     login_user(user, remember=remember)
-    return redirect(url_for('app.profile'))
+    return redirect(url_for('profile.html'))
 
 
 # app.register_blueprint(auth)  # auth_blueprint
@@ -143,7 +144,7 @@ def login_post():
 # db.init_app(app)
 
 login_manager = LoginManager()
-login_manager.login_view = 'app.login'
+login_manager.login_view = 'login.html'
 login_manager.init_app(app)
 
 
