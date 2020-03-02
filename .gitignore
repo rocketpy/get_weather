@@ -1,5 +1,5 @@
-db
-admin
+.db
+.sqlite
 __pycache__/*
 get_weather/get_weather/__pycache__/*
 get_weather/auth/__pycache__/*
