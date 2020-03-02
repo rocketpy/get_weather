@@ -17,7 +17,7 @@ app = Flask(__name__)
 # app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 admin = Admin(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////db.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/admin/PycharmProjects/get_weather/get_weather/db.sqlite'
 db.init_app(app)
 
 
@@ -104,14 +104,14 @@ def signup_post():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('app.login'))
 
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for('app.index'))
 
 
 class LoginForm(FlaskForm):
@@ -132,7 +132,7 @@ def login_post():
         flash('Please check your login details and try again.')
         return redirect(url_for('auth.login'))
     login_user(user, remember=remember)
-    return redirect(url_for('main.profile'))
+    return redirect(url_for('app.profile'))
 
 
 # app.register_blueprint(auth)  # auth_blueprint
@@ -143,7 +143,7 @@ def login_post():
 # db.init_app(app)
 
 login_manager = LoginManager()
-login_manager.login_view = 'auth.login'
+login_manager.login_view = 'app.login'
 login_manager.init_app(app)
 
 
