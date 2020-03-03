@@ -1,15 +1,15 @@
 from flask import Flask
 from flask_admin import Admin
+from flask_wtf import FlaskForm
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from flask_admin.contrib.sqla import ModelView
-from flask_login import UserMixin
-from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
+from flask_admin.contrib.sqla import ModelView
 from wtforms.validators import InputRequired, Length, DataRequired
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
+from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required
 
 
 app = Flask(__name__)
@@ -17,7 +17,8 @@ app = Flask(__name__)
 # app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 admin = Admin(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/admin/PycharmProjects/get_weather/get_weather/db.sqlite'
+app.config['CSRF_ENABLED'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////db.sqlite'
 db.init_app(app)
 
 
@@ -74,12 +75,12 @@ def add_post():
 # from .project.auth.auth import auth as auth_blueprint
 # auth = Blueprint('auth', __name__, template_folder='templates')
 
-"""
+
 @app.route('/login')
 def login():
     return render_template('login.html')
 
-
+"""
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
