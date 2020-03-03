@@ -24,7 +24,6 @@ db = SQLAlchemy(app)
 db.init_app(app)
 
 
-# from .project.models.models import User, UserPost
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     name = db.Column(db.String(20))
@@ -35,17 +34,18 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
 
 
+db_adapter = SQLAlchemyAdapter(db, User)
+user_manager = UserManager(db_adapter, app)
+
+
 class UserPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     email = db.Column(db.String(50))
     message = db.Column(db.Text)
 
-# db.init_app(app)
-# from .project.main.main import main as main_blueprint
+
 # main = Blueprint('main', __name__, template_folder='templates')
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -141,10 +141,6 @@ def login_post():
 
 # app.register_blueprint(auth)  # auth_blueprint
 # app.register_blueprint(main)  # main_blueprint
-
-# app.config['SECRET_KEY'] = ''
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-# db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.login_view = 'login.html'

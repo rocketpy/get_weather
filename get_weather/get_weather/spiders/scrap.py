@@ -1,4 +1,5 @@
 import scrapy
+from ..items import GetWeatherItem
 
 
 class MySpider(scrapy.Spider):
@@ -6,11 +7,11 @@ class MySpider(scrapy.Spider):
     start_urls = ['http://www.gismeteo.ua/city/daily/5093/']
 
     def parse(self, response):
-        for item in response.css('div.values'):
-            items = {
-                'night_temperature': response.css('span.unit unit_temperature_c::text')[0].extract(),
-                'day_temperature': response.css('span.unit unit_temperature_c::text')[1].extract()
-                    }
+        items = GetWeatherItem()
+        values = response.css('div.values')
+        for item in values:
+            night_temperature = response.css('span.unit unit_temperature_c::text')[0].extract()
+            day_temperature = response.css('span.unit unit_temperature_c::text')[1].extract()
+            items['night_temperature'] = night_temperature
+            items['day_temperature'] = day_temperature
             yield items
-
-
