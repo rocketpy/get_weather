@@ -8,22 +8,24 @@ from flask_admin.contrib.sqla import ModelView
 from wtforms.validators import InputRequired, Length, DataRequired
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user, login_required, current_user
-from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required
+from flask_login import login_user, logout_user
+from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required, current_user
 
 
 app = Flask(__name__)
 
 # app.config.from_pyfile('config.py')
-db = SQLAlchemy(app)
+
 admin = Admin(app)
 app.config['CSRF_ENABLED'] = True
+app.config['USER_ENABLE_EMAIL'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////db.sqlite'
+db = SQLAlchemy(app)
 db.init_app(app)
 
 
 # from .project.models.models import User, UserPost
-class User(UserMixin, db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     name = db.Column(db.String(20))
     surname = db.Column(db.String(20))
