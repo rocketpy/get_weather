@@ -6,10 +6,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from wtforms import StringField, PasswordField
 from flask_admin.contrib.sqla import ModelView
+from flask_login import login_user, logout_user
 from wtforms.validators import InputRequired, Length, DataRequired
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user
 from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required, current_user
 
 
@@ -20,7 +20,7 @@ app = Flask(__name__)
 admin = Admin(app)
 app.config['CSRF_ENABLED'] = True
 app.config['USER_ENABLE_EMAIL'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////db.sqlite'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
 db.init_app(app)
 Bootstrap(app)
@@ -36,8 +36,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
 
 
-db_adapter = SQLAlchemyAdapter(db, User)
-user_manager = UserManager(db_adapter, app)
+# db_adapter = SQLAlchemyAdapter(db, User)
+# user_manager = UserManager(db_adapter, app)
 
 
 class UserPost(db.Model):
@@ -64,9 +64,8 @@ class LoginForm(FlaskForm):
 
 
 class AddPostForm(FlaskForm):
+    name = StringField('name', validators=[InputRequired(message='An name is required !')])
     email = StringField('email', validators=[InputRequired(message='An email is required !')])
-    password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
-                                                     Length(max=100, message='Not greater a 100')])
     message = StringField('message', validators=[InputRequired(message='Text field is required !')])
 
 
@@ -88,8 +87,8 @@ def add_post():
     name = request.form['name']
     email = request.form['email']
     message = request.form['message']
-    post = UserPost(name=name, email=email, message=message)
-    db.session.add(post)
+    new_post = UserPost(name=name, email=email, message=message)
+    db.session.add(new_post)
     db.session.commit()
     return redirect(url_for('index.html'))
 
@@ -110,8 +109,11 @@ def signup():
 
 @app.route('/signup', methods=['POST'])
 def signup_post():
-    email = request.form.get('email')
     name = request.form.get('name')
+    surname = request.form.get('surname')
+    email = request.form.get('email')
+    sex = request.form.get('sex')
+    birthday = request.form.get('birthday')
     password = request.form.get('password')
 
     user = User.query.filter_by(email=email).first()  # this returns if email already exists in database
@@ -121,13 +123,20 @@ def signup_post():
         return redirect(url_for('signup.html'))
 
     # create new user
-    new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+    new_user = User(id=id, name=name, surname=surname, email=email, sex=sex, birthday=birthday,
+                    password=generate_password_hash(password, method='sha256'))
 
     # adding a new user to db
     db.session.add(new_user)
     db.session.commit()
 
     return redirect(url_for('login.html'))
+
+
+@app.route('/posts/<int:post_id>')
+def post(post_id):
+    posts = UserPost.query.filter_by(id=post_id).one()
+    return render_template('post.html', post=posts)
 
 
 @app.route('/logout')
