@@ -3,6 +3,7 @@ from flask_admin import Admin
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 from wtforms import StringField, PasswordField
 from flask_admin.contrib.sqla import ModelView
 from wtforms.validators import InputRequired, Length, DataRequired
@@ -22,6 +23,7 @@ app.config['USER_ENABLE_EMAIL'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////db.sqlite'
 db = SQLAlchemy(app)
 db.init_app(app)
+Bootstrap(app)
 
 
 class User(db.Model, UserMixin):
@@ -43,6 +45,12 @@ class UserPost(db.Model):
     name = db.Column(db.String(20))
     email = db.Column(db.String(50))
     message = db.Column(db.Text)
+
+
+class AddPostForm(FlaskForm):
+    email = StringField('email', validators=[InputRequired(message='An email is required !')])
+    password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
+                                                     Length(max=100, message='Not greater a 100')])
 
 
 # main = Blueprint('main', __name__, template_folder='templates')
