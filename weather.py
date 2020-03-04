@@ -47,10 +47,27 @@ class UserPost(db.Model):
     message = db.Column(db.Text)
 
 
+class SignUp(FlaskForm):
+    name = StringField('name', validators=[InputRequired(message='An name is required !')])
+    surname = StringField('surname', validators=[InputRequired(message='An surname is required !')])
+    sex = StringField('sex')
+    email = StringField('email', validators=[InputRequired(message='An email is required !')])
+    birthday = StringField('birthday')
+    password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
+                                                     Length(max=100, message='Not greater a 100')])
+
+
+class LoginForm(FlaskForm):
+    email = StringField('email', validators=[InputRequired(message='An email is required !')])
+    password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
+                                                     Length(max=100, message='Not greater a 100')])
+
+
 class AddPostForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(message='An email is required !')])
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
                                                      Length(max=100, message='Not greater a 100')])
+    message = StringField('message', validators=[InputRequired(message='Text field is required !')])
 
 
 # main = Blueprint('main', __name__, template_folder='templates')
@@ -63,12 +80,6 @@ def index():
 @login_required
 def profile():
     return render_template('profile.html', name=current_user.name)
-
-
-class AddPostForm(FlaskForm):
-    email = StringField('email', validators=[InputRequired(message='An email is required !')])
-    password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
-                                                     Length(max=100, message='Not greater a 100')])
 
 
 @app.route('/add', methods=['POST'])
@@ -124,12 +135,6 @@ def signup_post():
 def logout():
     logout_user()
     return redirect(url_for('index.html'))
-
-
-class LoginForm(FlaskForm):
-    email = StringField('email', validators=[InputRequired(message='An email is required !')])
-    password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
-                                                     Length(max=100, message='Not greater a 100')])
 
 
 @app.route('/login', methods=['POST'])
