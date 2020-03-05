@@ -75,6 +75,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/weather')
+@login_required
+def weather():
+    return render_template('weather.html')
+
+
 @app.route('/profile')
 @login_required
 def profile():
