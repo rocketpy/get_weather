@@ -68,23 +68,29 @@ class AddPostForm(FlaskForm):
 #user_manager = UserManager(db_adapter, app)
 
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+"""
 # main = Blueprint('main', __name__, template_folder='templates')
 @app.route('/')
 def index():
     return render_template('index.html')
-
+"""
 
 @app.route('/weather')
 #@login_required
 def weather():
     return render_template('weather.html')
 
-
+"""
 @app.route('/profile')
 @login_required
 def profile():
     return render_template('profile.html', name=current_user.name)
-
+"""
 
 @app.route('/add', methods=['POST'])
 #@login_required
@@ -99,17 +105,6 @@ def add_post():
 
 # from .project.auth.auth import auth as auth_blueprint
 # auth = Blueprint('auth', __name__, template_folder='templates')
-
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-"""
-@app.route('/signup')
-def signup():
-    return render_template('signup.html')
-"""
 
 
 @app.route('/signup', methods=['POST'])
