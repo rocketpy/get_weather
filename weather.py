@@ -138,10 +138,10 @@ def signup_post():
     return redirect(url_for('login.html'))
 
 
-@app.route('/posts/<int:post_id>')
+@app.route('/posts')
 #@login_required
-def post(post_id):
-    posts = UserPost.query.filter_by(id=post_id).one()
+def post():
+    posts = UserPost.query.order_by(UserPost.date_posted.desc()).all()
     return render_template('post.html', post=posts)
 
 
