@@ -18,7 +18,7 @@ app = Flask(__name__)
 # app.config.from_pyfile('config.py')
 
 admin = Admin(app)
-app.config['CSRF_ENABLED'] = True
+app.config['CSRF_ENABLED'] = False
 app.config['USER_ENABLE_EMAIL'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
@@ -34,10 +34,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), unique=True)
     birthday = db.Column(db.DateTime)
     password = db.Column(db.String(50))
-
-
-# db_adapter = SQLAlchemyAdapter(db, User)
-# user_manager = UserManager(db_adapter, app)
 
 
 class UserPost(db.Model):
@@ -68,6 +64,9 @@ class AddPostForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(message='An email is required !')])
     message = StringField('message', validators=[InputRequired(message='Text field is required !')])
 
+#db_adapter = SQLAlchemyAdapter(db, User)
+#user_manager = UserManager(db_adapter, app)
+
 
 # main = Blueprint('main', __name__, template_folder='templates')
 @app.route('/')
@@ -76,7 +75,7 @@ def index():
 
 
 @app.route('/weather')
-@login_required
+#@login_required
 def weather():
     return render_template('weather.html')
 
@@ -88,7 +87,7 @@ def profile():
 
 
 @app.route('/add', methods=['POST'])
-@login_required
+#@login_required
 def add_post():
     name = request.form['name']
     email = request.form['email']
@@ -140,6 +139,7 @@ def signup_post():
 
 
 @app.route('/posts/<int:post_id>')
+#@login_required
 def post(post_id):
     posts = UserPost.query.filter_by(id=post_id).one()
     return render_template('post.html', post=posts)
