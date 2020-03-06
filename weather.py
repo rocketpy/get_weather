@@ -64,47 +64,8 @@ class AddPostForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(message='An email is required !')])
     message = StringField('message', validators=[InputRequired(message='Text field is required !')])
 
-#db_adapter = SQLAlchemyAdapter(db, User)
-#user_manager = UserManager(db_adapter, app)
-
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-
-"""
-# main = Blueprint('main', __name__, template_folder='templates')
-@app.route('/')
-def index():
-    return render_template('index.html')
-"""
-
-@app.route('/weather')
-#@login_required
-def weather():
-    return render_template('weather.html')
-
-"""
-@app.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html', name=current_user.name)
-"""
-
-@app.route('/add', methods=['POST'])
-#@login_required
-def add_post():
-    name = request.form['name']
-    email = request.form['email']
-    message = request.form['message']
-    new_post = UserPost(name=name, email=email, message=message)
-    db.session.add(new_post)
-    db.session.commit()
-    return redirect(url_for('index.html'))
-
-# from .project.auth.auth import auth as auth_blueprint
-# auth = Blueprint('auth', __name__, template_folder='templates')
+# db_adapter = SQLAlchemyAdapter(db, User)
+# user_manager = UserManager(db_adapter, app)
 
 
 @app.route('/signup', methods=['POST'])
@@ -133,20 +94,6 @@ def signup_post():
     return redirect(url_for('login.html'))
 
 
-@app.route('/posts')
-#@login_required
-def post():
-    posts = UserPost.query.order_by(UserPost.date_posted.desc()).all()
-    return render_template('post.html', post=posts)
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('index.html'))
-
-
 @app.route('/login', methods=['POST'])
 def login_post():
     email = request.form.get('email')
@@ -159,7 +106,60 @@ def login_post():
         flash('Please check your login details and try again.')
         return redirect(url_for('login.html'))
     login_user(user, remember=remember)
-    return redirect(url_for('profile.html'))
+    return redirect(url_for('weather.html'))
+
+
+"""
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+# main = Blueprint('main', __name__, template_folder='templates')
+@app.route('/')
+def index():
+    return render_template('index.html')
+"""
+
+
+@app.route('/weather')
+#@login_required
+def weather():
+    return render_template('weather.html')
+
+"""
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', name=current_user.name)
+"""
+
+@app.route('/add', methods=['POST'])
+#@login_required
+def add_post():
+    name = request.form['name']
+    email = request.form['email']
+    message = request.form['message']
+    new_post = UserPost(name=name, email=email, message=message)
+    db.session.add(new_post)
+    db.session.commit()
+    return redirect(url_for('index.html'))
+
+# from .project.auth.auth import auth as auth_blueprint
+# auth = Blueprint('auth', __name__, template_folder='templates')
+
+
+@app.route('/posts')
+#@login_required
+def post():
+    posts = UserPost.query.order_by(UserPost.date_posted.desc()).all()
+    return render_template('post.html', post=posts)
+
+
+@app.route('/logout')
+#@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index.html'))
 
 
 # app.register_blueprint(auth)  # auth_blueprint
