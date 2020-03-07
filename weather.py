@@ -140,13 +140,16 @@ def profile():
 #@login_required
 def add_post():
     form = AddPostForm()
-    name = request.form['name']
-    email = request.form['email']
-    message = request.form['message']
-    new_post = UserPost(name=name, email=email, message=message)
-    db.session.add(new_post)
-    db.session.commit()
-    return redirect(url_for('index.html', form=form))
+    if form.validate_on_submit():
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+        new_post = UserPost(name=name, email=email, message=message)
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for('posts.html', form=form))
+    else:
+        return redirect(url_for('post.html', form=form))
 
 # from .project.auth.auth import auth as auth_blueprint
 # auth = Blueprint('auth', __name__, template_folder='templates')
