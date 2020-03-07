@@ -68,8 +68,9 @@ class AddPostForm(FlaskForm):
 # user_manager = UserManager(db_adapter, app)
 
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
+    form = SignUp()
     name = request.form.get('name')
     surname = request.form.get('surname')
     email = request.form.get('email')
@@ -94,8 +95,9 @@ def signup_post():
     return redirect(url_for('login.html'))
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login_post():
+    form = LoginForm()
     email = request.form.get('email')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
@@ -133,9 +135,11 @@ def profile():
     return render_template('profile.html', name=current_user.name)
 """
 
-@app.route('/add', methods=['POST'])
+
+@app.route('/add', methods=['POST', 'GET'])
 #@login_required
 def add_post():
+    form = AddPostForm()
     name = request.form['name']
     email = request.form['email']
     message = request.form['message']
