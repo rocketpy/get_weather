@@ -54,7 +54,7 @@ class SignUp(FlaskForm):
     email = StringField('email', validators=[InputRequired(message='An email is required !')])
     birthday = StringField('birthday')
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
-                                                     Length(max=100, message='Not greater a 100')])
+                                                     Length(max=50, message='Not greater a 50')])
 
 
 class LoginForm(FlaskForm):
@@ -77,44 +77,46 @@ def index():
 @app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
     form = SignUp()
-    name = request.form.get('name')
-    surname = request.form.get('surname')
-    email = request.form.get('email')
-    sex = request.form.get('sex')
-    birthday = request.form.get('birthday')
-    password = request.form.get('password')
+    if form.validate_on_submit():
+        name = request.form.get('name')
+        surname = request.form.get('surname')
+        email = request.form.get('email')
+        sex = request.form.get('sex')
+        birthday = request.form.get('birthday')
+        password = request.form.get('password')
 
-    user = User.query.filter_by(email=email).first()  # this returns if email already exists in database
+        user = User.query.filter_by(email=email).first()  # this returns if email already exists in database
 
-    if user:  # redirect back to signup page
-        flash('Email address already exists')
-        return redirect(url_for('signup.html', form=form))
+        if user:  # redirect back to signup page
+            flash('Email address already exists')
+            return redirect(url_for('signup.html', form=form))
 
-    # create new user
-    new_user = User(id=id, name=name, surname=surname, email=email, sex=sex, birthday=birthday,
-                    password=generate_password_hash(password, method='sha256'))
+        # create new user
+        new_user = User(id=id, name=name, surname=surname, email=email, sex=sex, birthday=birthday,
+                        password=generate_password_hash(password, method='sha256'))
 
-    # adding a new user to db
-    db.session.add(new_user)
-    db.session.commit()
+        # adding a new user to db
+        db.session.add(new_user)
+        db.session.commit()
 
-    return redirect(url_for('login.html'))
+        return redirect(url_for('login.html'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login_post():
     form = LoginForm()
-    email = request.form.get('email')
-    password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
+    if form.validate_on_submit():
+        email = request.form.get('email')
+        password = request.form.get('password')
+        remember = True if request.form.get('remember') else False
 
-    user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
 
-    if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
-        return redirect(url_for('login.html'))
-    login_user(user, remember=remember)
-    return redirect(url_for('weather.html', form=form))
+        if not user or not check_password_hash(user.password, password):
+            flash('Please check your login details and try again.')
+            return redirect(url_for('login.html'))
+        login_user(user, remember=remember)
+        return redirect(url_for('weather.html', form=form))
 
 
 @app.route('/weather')
