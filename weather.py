@@ -68,6 +68,11 @@ class AddPostForm(FlaskForm):
 # user_manager = UserManager(db_adapter, app)
 
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
 @app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
     form = SignUp()
@@ -82,7 +87,7 @@ def signup_post():
 
     if user:  # redirect back to signup page
         flash('Email address already exists')
-        return redirect(url_for('signup.html'))
+        return redirect(url_for('signup.html', form=form))
 
     # create new user
     new_user = User(id=id, name=name, surname=surname, email=email, sex=sex, birthday=birthday,
@@ -108,14 +113,10 @@ def login_post():
         flash('Please check your login details and try again.')
         return redirect(url_for('login.html'))
     login_user(user, remember=remember)
-    return redirect(url_for('weather.html'))
+    return redirect(url_for('weather.html', form=form))
 
 
 """
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
 # main = Blueprint('main', __name__, template_folder='templates')
 @app.route('/')
 def index():
@@ -146,7 +147,7 @@ def add_post():
     new_post = UserPost(name=name, email=email, message=message)
     db.session.add(new_post)
     db.session.commit()
-    return redirect(url_for('index.html'))
+    return redirect(url_for('index.html', form=form))
 
 # from .project.auth.auth import auth as auth_blueprint
 # auth = Blueprint('auth', __name__, template_folder='templates')
