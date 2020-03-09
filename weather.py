@@ -18,7 +18,7 @@ app = Flask(__name__)
 # app.config.from_pyfile('config.py')
 
 admin = Admin(app)
-# app.config['CSRF_ENABLED'] = False
+app.config['CSRF_ENABLED'] = True
 app.config['USER_ENABLE_EMAIL'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
@@ -36,8 +36,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
 
 
-# db_adapter = SQLAlchemyAdapter(db, User)
-# user_manager = UserManager(db_adapter, app)
+db_adapter = SQLAlchemyAdapter(db, User)
+user_manager = UserManager(db_adapter, app)
 
 
 class UserPost(db.Model):
