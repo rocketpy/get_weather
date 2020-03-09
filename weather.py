@@ -15,12 +15,11 @@ from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required
 
 app = Flask(__name__)
 
-# app.config.from_pyfile('config.py')
-
+app.config.from_pyfile('config.py')
 admin = Admin(app)
 app.config['CSRF_ENABLED'] = True
 app.config['USER_ENABLE_EMAIL'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
 db.init_app(app)
 Bootstrap(app)
@@ -187,4 +186,4 @@ admin.add_view(ModelView(UserPost, db.session))
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
