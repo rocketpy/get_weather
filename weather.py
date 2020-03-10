@@ -98,7 +98,7 @@ def signup_post():
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect(url_for('login.html'))
+    return redirect(url_for('signup.html'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -115,7 +115,7 @@ def login_post():
             flash('Please check your login details and try again.')
             return redirect(url_for('login.html'))
         login_user(user, remember=remember)
-        return redirect(url_for('weather.html', form=form))
+    return redirect(url_for('weather.html', form=form))
 
 
 @app.route('/weather')
