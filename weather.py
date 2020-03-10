@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_admin import Admin
 from flask_wtf import FlaskForm
@@ -17,7 +18,10 @@ app = Flask(__name__)
 
 # app.config.from_pyfile('config.py')
 admin = Admin(app)
-SECRET_KEY = 'Secret_key'
+# SECRET_KEY = os.urandom(32)
+# app.config['SECRET_KEY'] = SECRET_KEY
+# SECRET_KEY = 'Secret_key'
+app.config.update(dict(SECRET_KEY="powerful secretkey", WTF_CSRF_SECRET_KEY="a csrf secret key"))
 app.config['CSRF_ENABLED'] = True
 app.config['USER_ENABLE_EMAIL'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -36,8 +40,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
 
 
-db_adapter = SQLAlchemyAdapter(db, User)
-user_manager = UserManager(db_adapter, app)
+# db_adapter = SQLAlchemyAdapter(db, User)
+# user_manager = UserManager(db_adapter, app)
 
 
 class UserPost(db.Model):
@@ -74,17 +78,17 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/signup', methods=['POST', 'GET'])
+@app.route('/signup_post', methods=['POST', 'GET'])
 def signup_post():
+    name = request.form.get('name')
+    surname = request.form.get('surname')
+    email = request.form.get('email')
+    sex = request.form.get('sex')
+    birthday = request.form.get('birthday')
+    password = request.form.get('password')
+
     form = SignUp()
     if form.validate_on_submit():
-        name = request.form.get('name')
-        surname = request.form.get('surname')
-        email = request.form.get('email')
-        sex = request.form.get('sex')
-        birthday = request.form.get('birthday')
-        password = request.form.get('password')
-
         user = User.query.filter_by(email=email).first()  # this returns if email already exists in database
 
         if user:  # redirect back to signup page
@@ -114,9 +118,9 @@ def login_post():
 
         if not user or not check_password_hash(user.password, password):
             flash('Please check your login details and try again.')
-            return redirect(url_for('login.html'))
+            return redirect(url_for('signup.html'))
         login_user(user, remember=remember)
-    return redirect(url_for('weather.html', form=form))
+    return redirect(url_for('login.html'))
 
 
 @app.route('/weather')

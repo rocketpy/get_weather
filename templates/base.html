@@ -36,6 +36,11 @@
                             </a>
                             {% endif %}
                             {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('add_post') }}" class="navbar-item">
+                                Add post
+                            </a>
+                            {% endif %}
+                            {% if current_user.is_authenticated %}
                             <a href="{{ url_for('logout') }}" class="navbar-item">
                                 Logout
                             </a>
