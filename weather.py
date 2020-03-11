@@ -78,7 +78,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/signup_post', methods=['POST', 'GET'])
+@app.route('/signup', methods=['POST'])
 def signup_post():
     name = request.form.get('name')
     surname = request.form.get('surname')
@@ -93,7 +93,7 @@ def signup_post():
 
         if user:  # redirect back to signup page
             flash('Email address already exists')
-            return redirect(url_for('signup.html', form=form))
+            return redirect(url_for('signup', form=form))
 
         # create new user
         new_user = User(id=id, name=name, surname=surname, email=email, sex=sex, birthday=birthday,
@@ -103,7 +103,7 @@ def signup_post():
         db.session.add(new_user)
         db.session.commit()
 
-    return redirect(url_for('signup.html'))
+    return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
