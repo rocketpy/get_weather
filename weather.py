@@ -124,25 +124,31 @@ def signup_post():
 
 @app.route('/login', methods=['POST'])
 def login_post():
-    form = LoginForm()
-    if form.validate_on_submit():
-        email = request.form.get('email')
-        password = request.form.get('password')
-        remember = True if request.form.get('remember') else False
+    email = request.form.get('email')
+    password = request.form.get('password')
+    remember = True if request.form.get('remember') else False
 
-        user = User.query.filter_by(email=email).first()
-
-        if not user or not check_password_hash(user.password, password):
-            flash('Please check your login details and try again.')
-            return redirect(url_for('signup.html'))
-        login_user(user, remember=remember)
-    return redirect(url_for('login.html'))
+    user = User.query.filter_by(email=email).first()
+#    form = LoginForm()
+#    if form.validate_on_submit():
+#        email = request.form.get('email')
+#        password = request.form.get('password')
+#       remember = True if request.form.get('remember') else False
+#
+#        user = User.query.filter_by(email=email).first()
+    if not user or not check_password_hash(user.password, password):
+        flash('Please check your login details and try again.')
+        return redirect(url_for('login'))
+#       login_user(user, remember=remember)
+    return redirect(url_for('profile'))
 
 
 @app.route('/weather')
 #@login_required
 def weather():
     return render_template('weather.html')
+
+
 """
 # main = Blueprint('main', __name__, template_folder='templates')
 @app.route('/')
