@@ -78,6 +78,16 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+
 @app.route('/signup', methods=['POST'])
 def signup_post():
     name = request.form.get('name')
