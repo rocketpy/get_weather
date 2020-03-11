@@ -79,8 +79,9 @@ def index():
 
 
 @app.route('/profile')
+@login_required
 def profile():
-    return render_template('profile.html')
+    return render_template('profile.html', name=current_user.name)
 
 
 @app.route('/login')
@@ -102,14 +103,14 @@ def signup_post():
     birthday = request.form.get('birthday')
     password = request.form.get('password')
     user = User.query.filter_by(email=email).first()
-#    form = SignUp()
+#   form = SignUp()
 
-#    if form.validate_on_submit():
-#        user = User.query.filter_by(email=email).first()
+#   if form.validate_on_submit():
+#       user = User.query.filter_by(email=email).first()
 
     if user:  # redirect back to signup page
         flash('Email address already exists')
-        return redirect(url_for('signup'))  # form=form
+        return redirect(url_for('signup.html'))  # form=form
 
     # create new user
     new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
@@ -119,7 +120,7 @@ def signup_post():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for('login'))
+    return redirect(url_for('login.html'))
 
 
 @app.route('/login', methods=['POST'])
@@ -133,14 +134,14 @@ def login_post():
 #    if form.validate_on_submit():
 #        email = request.form.get('email')
 #        password = request.form.get('password')
-#       remember = True if request.form.get('remember') else False
+#        remember = True if request.form.get('remember') else False
 #
 #        user = User.query.filter_by(email=email).first()
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
-        return redirect(url_for('login'))
-#       login_user(user, remember=remember)
-    return redirect(url_for('profile'))
+        return redirect(url_for('login.html'))
+    login_user(user, remember=remember)
+    return redirect(url_for('profile.html'))
 
 
 @app.route('/weather')
@@ -189,7 +190,7 @@ def post():
 
 
 @app.route('/logout')
-#@login_required
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index.html'))
