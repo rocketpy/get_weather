@@ -20,8 +20,7 @@ app = Flask(__name__)
 admin = Admin(app)
 # SECRET_KEY = os.urandom(32)
 # app.config['SECRET_KEY'] = SECRET_KEY
-# SECRET_KEY = 'Secret_key'
-app.config.update(dict(SECRET_KEY="powerful secretkey", WTF_CSRF_SECRET_KEY="a csrf secret key"))
+app.config.update(dict(SECRET_KEY="secret_key", WTF_CSRF_SECRET_KEY="csrf_secret_key"))
 app.config['CSRF_ENABLED'] = True
 app.config['USER_ENABLE_EMAIL'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
@@ -40,8 +39,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
 
 
-# db_adapter = SQLAlchemyAdapter(db, User)
-# user_manager = UserManager(db_adapter, app)
+db_adapter = SQLAlchemyAdapter(db, User)
+user_manager = UserManager(db_adapter, app)
 
 
 class UserPost(db.Model):
@@ -102,7 +101,9 @@ def signup_post():
     sex = request.form.get('sex')
     birthday = request.form.get('birthday')
     password = request.form.get('password')
+
     user = User.query.filter_by(email=email).first()
+
     form = SignUp()
     if form.validate_on_submit():
         new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
@@ -110,11 +111,12 @@ def signup_post():
         # adding a new user to db
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
-        return redirect(url_for('signup.html', form=form))
 
     if user:  # redirect back to signup page
         flash('Email address already exists')
         return redirect(url_for('login.html'))
+
+    return redirect(url_for('signup.html', form=form))
 """
     # create new user
     new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
@@ -135,18 +137,15 @@ def login_post():
     remember = True if request.form.get('remember') else False
 
     user = User.query.filter_by(email=email).first()
-#    form = LoginForm()
-#    if form.validate_on_submit():
-#        email = request.form.get('email')
-#        password = request.form.get('password')
-#        remember = True if request.form.get('remember') else False
-#
-#        user = User.query.filter_by(email=email).first()
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        login_user(user, remember=remember)
+        return redirect(url_for('profile.html', form=form))
+
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
         return redirect(url_for('login.html'))
-    login_user(user, remember=remember)
-    return redirect(url_for('profile.html'))
 
 
 @app.route('/weather')
