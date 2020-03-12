@@ -149,8 +149,9 @@ def login_post():
 
 
 @app.route('/weather')
-#@login_required
+@login_required
 def weather():
+
     return render_template('weather.html')
 
 
@@ -168,7 +169,7 @@ def profile():
 
 
 @app.route('/add', methods=['POST', 'GET'])
-#@login_required
+@login_required
 def add_post():
     form = AddPostForm()
     if form.validate_on_submit():
@@ -187,7 +188,7 @@ def add_post():
 
 
 @app.route('/posts')
-#@login_required
+@login_required
 def post():
     posts = UserPost.query.order_by(UserPost.date_posted.desc()).all()
     return render_template('posts.html', post=posts)
