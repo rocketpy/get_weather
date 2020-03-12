@@ -103,15 +103,19 @@ def signup_post():
     birthday = request.form.get('birthday')
     password = request.form.get('password')
     user = User.query.filter_by(email=email).first()
-#   form = SignUp()
-
-#   if form.validate_on_submit():
-#       user = User.query.filter_by(email=email).first()
+    form = SignUp()
+    if form.validate_on_submit():
+        new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
+                        password=generate_password_hash(password, method='sha256'))
+        # adding a new user to db
+        db.session.add(new_user)  # adding a new user to db
+        db.session.commit()
+        return redirect(url_for('signup.html', form=form))
 
     if user:  # redirect back to signup page
         flash('Email address already exists')
-        return redirect(url_for('signup.html'))  # form=form
-
+        return redirect(url_for('login.html'))
+"""
     # create new user
     new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
                     password=generate_password_hash(password, method='sha256'))
@@ -121,6 +125,7 @@ def signup_post():
     db.session.commit()
 
     return redirect(url_for('login.html'))
+"""
 
 
 @app.route('/login', methods=['POST'])
