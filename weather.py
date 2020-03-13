@@ -111,23 +111,13 @@ def signup_post():
         # adding a new user to db
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
+        return redirect(url_for('profile.html'))
 
     if user:  # redirect back to signup page
         flash('Email address already exists')
         return redirect(url_for('login.html'))
 
     return redirect(url_for('signup.html', form=form))
-"""
-    # create new user
-    new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
-                    password=generate_password_hash(password, method='sha256'))
-
-    # adding a new user to db
-    db.session.add(new_user)
-    db.session.commit()
-
-    return redirect(url_for('login.html'))
-"""
 
 
 @app.route('/login', methods=['POST'])
@@ -155,19 +145,6 @@ def weather():
     return render_template('weather.html')
 
 
-"""
-# main = Blueprint('main', __name__, template_folder='templates')
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html', name=current_user.name)
-"""
-
-
 @app.route('/add', methods=['POST', 'GET'])
 @login_required
 def add_post():
@@ -182,9 +159,6 @@ def add_post():
         return redirect(url_for('posts.html', form=form))
     else:
         return redirect(url_for('post.html', form=form))
-
-# from .project.auth.auth import auth as auth_blueprint
-# auth = Blueprint('auth', __name__, template_folder='templates')
 
 
 @app.route('/posts')
