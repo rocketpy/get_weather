@@ -111,13 +111,13 @@ def signup_post():
         # adding a new user to db
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
-        return redirect(url_for('profile.html'))
+        return render_template('profile.html')
 
     if user:  # redirect back to signup page
         flash('Email address already exists')
-        return redirect(url_for('login.html'))
+        return render_template('login.html')
 
-    return redirect(url_for('signup.html', form=form))
+    return render_template('signup.html', form=form)
 
 
 @app.route('/login', methods=['POST'])
@@ -131,11 +131,11 @@ def login_post():
     form = LoginForm()
     if form.validate_on_submit():
         login_user(user, remember=remember)
-        return redirect(url_for('profile.html', form=form))
+        return render_template('profile.html', form=form)
 
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
-        return redirect(url_for('login.html'))
+        return render_template('login.html')
 
 
 @app.route('/weather')
@@ -156,9 +156,9 @@ def add_post():
         new_post = UserPost(name=name, email=email, message=message)
         db.session.add(new_post)
         db.session.commit()
-        return redirect(url_for('posts.html', form=form))
+        return render_template('posts.html', form=form)
     else:
-        return redirect(url_for('post.html', form=form))
+        return render_template('post.html', form=form)
 
 
 @app.route('/posts')
@@ -172,7 +172,7 @@ def post():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index.html'))
+    return render_template('index.html')
 
 
 # app.register_blueprint(auth)  # auth_blueprint

@@ -11,9 +11,9 @@
             </div>
         {% endif %}
         {% endwith %}
-        <form method="POST" action="{{ url_for('form') }}>
-        {{ form.csrf_token }}
 
+        <form method="POST" action="{{ url_for('form') }}">
+            {{ form.csrf_token }}
             <div class="field">
                 <div class="control">
                     <input class="input is-large" type="email" name="email" placeholder="Your Email" autofocus="">
