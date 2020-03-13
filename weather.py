@@ -4,7 +4,6 @@ from flask_admin import Admin
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from flask_bootstrap import Bootstrap
 from wtforms import StringField, PasswordField
 from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
@@ -12,7 +11,7 @@ from wtforms.validators import InputRequired, Length, DataRequired
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required, current_user
-
+# from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 
@@ -20,9 +19,10 @@ app = Flask(__name__)
 admin = Admin(app)
 # SECRET_KEY = os.urandom(32)
 # app.config['SECRET_KEY'] = SECRET_KEY
-app.config.update(dict(SECRET_KEY="secret_key", WTF_CSRF_SECRET_KEY="csrf_secret_key"))
+app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
 app.config['CSRF_ENABLED'] = True
-app.config['USER_ENABLE_EMAIL'] = False
+app.config['USER_ENABLE_EMAIL'] = True
+app.config['USER_APP_NAME'] = 'Flask_weather'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
 db.init_app(app)
@@ -95,6 +95,7 @@ def signup():
 
 @app.route('/signup', methods=['POST'])
 def signup_post():
+# if request.method == "POST":
     name = request.form.get('name')
     surname = request.form.get('surname')
     email = request.form.get('email')
@@ -122,6 +123,7 @@ def signup_post():
 
 @app.route('/login', methods=['POST'])
 def login_post():
+# if request.method == "POST":
     email = request.form.get('email')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
@@ -131,11 +133,14 @@ def login_post():
     form = LoginForm()
     if form.validate_on_submit():
         login_user(user, remember=remember)
-        return render_template('profile.html', form=form)
+        flash('Logged in successfully.')
+#       return render_template('profile.html', form=form)
 
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
         return render_template('login.html')
+
+    return render_template('profile.html', form=form)
 
 
 @app.route('/weather')

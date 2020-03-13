@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
 </head>
 
-<body style="background-image: url('home.jpg')">
+<body style="background-image: url('{{ url_for('templates', filename='home.jpg') }}')">
 
     <section class="hero is-primary is-fullheight">
         <div class="hero-head">

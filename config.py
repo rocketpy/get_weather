@@ -1,4 +1,9 @@
 DEBUG = True
 SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite'
-SECRET_KEY = 'Secret_key'
+SECRET_KEY = 'SECRET_KEY'
+WTF_CSRF_SECRET_KEY = "CSRF_SECRET_KEY"
+CSRF_ENABLED = True
+USER_ENABLE_EMAIL = True
+USER_APP_NAME = 'Flask_weather'
 
+# SECRET_KEY = os.urandom(32)
