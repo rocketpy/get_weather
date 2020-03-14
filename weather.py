@@ -18,7 +18,7 @@ app = Flask(__name__)
 # app.config.from_pyfile('config.py')
 admin = Admin(app)
 # SECRET_KEY = os.urandom(32)
-# app.config['SECRET_KEY'] = SECRET_KEY
+app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
 app.config['CSRF_ENABLED'] = True
 app.config['USER_ENABLE_EMAIL'] = True
@@ -27,6 +27,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
 db.init_app(app)
 # Bootstrap(app)
+# style="background-image: url('{{ url_for('templates', filename='home.jpg') }}')"
 
 
 class User(db.Model, UserMixin):
@@ -82,7 +83,7 @@ def index():
 def profile():
     return render_template('profile.html', name=current_user.name)
 
-
+"""
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -91,11 +92,11 @@ def login():
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
-
+"""
 
 @app.route('/signup', methods=['POST'])
 def signup_post():
-# if request.method == "POST":
+    # if request.method == "POST":
     name = request.form.get('name')
     surname = request.form.get('surname')
     email = request.form.get('email')
@@ -123,7 +124,7 @@ def signup_post():
 
 @app.route('/login', methods=['POST'])
 def login_post():
-# if request.method == "POST":
+    # if request.method == "POST":
     email = request.form.get('email')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
