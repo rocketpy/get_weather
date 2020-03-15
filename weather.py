@@ -94,9 +94,9 @@ def signup():
     return render_template('signup.html')
 
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
-    # if request.method == "POST":
+    form = SignUp()
     name = request.form.get('name')
     surname = request.form.get('surname')
     email = request.form.get('email')
@@ -106,14 +106,13 @@ def signup_post():
 
     user = User.query.filter_by(email=email).first()
 
-    form = SignUp()
     if form.validate_on_submit():
         new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
                         password=generate_password_hash(password, method='sha256'))
         # adding a new user to db
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
-        return render_template('profile.html')
+        return redirect(url_for('profile'))
 
     if user:  # redirect back to signup page
         flash('Email address already exists')
@@ -122,20 +121,18 @@ def signup_post():
     return render_template('signup.html', form=form)
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login_post():
-    # if request.method == "POST":
+    form = LoginForm()
     email = request.form.get('email')
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
     user = User.query.filter_by(email=email).first()
-
-    form = LoginForm()
     if form.validate_on_submit():
         login_user(user, remember=remember)
         flash('Logged in successfully.')
-#       return render_template('profile.html', form=form)
+        return redirect(url_for('login_post', form=form))
 
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
