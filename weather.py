@@ -20,9 +20,9 @@ admin = Admin(app)
 # SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
-app.config['CSRF_ENABLED'] = True
-app.config['USER_ENABLE_EMAIL'] = True
-app.config['USER_APP_NAME'] = 'Flask_weather'
+# app.config['CSRF_ENABLED'] = True
+# app.config['USER_ENABLE_EMAIL'] = False
+# app.config['USER_APP_NAME'] = 'Flask_weather'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
 db.init_app(app)
@@ -40,8 +40,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
 
 
-db_adapter = SQLAlchemyAdapter(db, User)
-user_manager = UserManager(db_adapter, app)
+# db_adapter = SQLAlchemyAdapter(db, User)
+# user_manager = UserManager(db_adapter, app)
 
 
 class UserPost(db.Model):
@@ -83,7 +83,7 @@ def index():
 def profile():
     return render_template('profile.html', name=current_user.name)
 
-"""
+
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -92,7 +92,7 @@ def login():
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
-"""
+
 
 @app.route('/signup', methods=['POST'])
 def signup_post():
@@ -146,7 +146,7 @@ def login_post():
 
 @app.route('/weather')
 @login_required
-def weather():
+def show_weather():
 
     return render_template('weather.html')
 
