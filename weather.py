@@ -133,11 +133,11 @@ def login_post():
     if form.validate_on_submit():
         login_user(user, remember=remember)
         flash('Logged in successfully.')
-        return redirect(url_for('login_post', form=form))
+#        return redirect(url_for('login_post', form=form))
 
-    if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
-        return redirect(url_for('signup_post', form=form))
+        if not user or not check_password_hash(user.password, password):
+            flash('Please check your login details and try again.')
+            return redirect(url_for('signup_post', form=form))
 
     return render_template('login.html', form=form)
 
