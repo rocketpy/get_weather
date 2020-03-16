@@ -83,7 +83,7 @@ def index():
 def profile():
     return render_template('profile.html', name=current_user.name)
 
-
+"""
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -92,7 +92,7 @@ def login():
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
-
+"""
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
