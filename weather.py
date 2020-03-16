@@ -4,7 +4,7 @@ from flask_admin import Admin
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, BooleanField
 from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
 from wtforms.validators import InputRequired, Length, DataRequired
@@ -30,7 +30,7 @@ db.init_app(app)
 # style="background-image: url('{{ url_for('templates', filename='home.jpg') }}')"
 
 
-class User(db.Model, UserMixin):
+class User(db.Model):  # UserMixin
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     name = db.Column(db.String(20))
     surname = db.Column(db.String(20))
@@ -52,11 +52,14 @@ class UserPost(db.Model):
 
 
 class SignUp(FlaskForm):
-    name = StringField('name', validators=[InputRequired(message='An name is required !')])
-    surname = StringField('surname', validators=[InputRequired(message='An surname is required !')])
-    sex = StringField('sex')
-    email = StringField('email', validators=[InputRequired(message='An email is required !')])
-    birthday = StringField('birthday')
+    name = StringField('name', validators=[InputRequired(message='An name is required !')
+                                           , Length(min=2, max=20)])
+    surname = StringField('surname', validators=[InputRequired(message='An surname is required !'),
+                                                 Length(min=2, max=20)])
+    sex = StringField('sex', validators=Length(min=4, max=6))
+    email = StringField('email', validators=[InputRequired(message='An email is required !'),
+                                             Length(min=10, max=50)])
+    birthday = StringField('birthday', Length(min=6, max=8))
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
                                                      Length(max=50, message='Not greater a 50')])
 
@@ -65,6 +68,7 @@ class LoginForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(message='An email is required !')])
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
                                                      Length(max=100, message='Not greater a 100')])
+    remember = BooleanField('remember me')
 
 
 class AddPostForm(FlaskForm):
@@ -113,9 +117,10 @@ def signup_post():
         # adding a new user to db
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
-        return redirect(url_for('profile'))
+        flash('New user created !')
+        return render_template('profile.html')
 
-    if user:  # redirect back to signup page
+    if user:
         flash('Email address already exists')
         return render_template('login.html')
 
@@ -133,11 +138,12 @@ def login_post():
     if form.validate_on_submit():
         login_user(user, remember=remember)
         flash('Logged in successfully.')
+        return render_template('profile.html')
 #        return redirect(url_for('login_post', form=form))
 
-        if not user or not check_password_hash(user.password, password):
-            flash('Please check your login details and try again.')
-            return redirect(url_for('signup_post', form=form))
+    if not user or not check_password_hash(user.password, password):
+        flash('Please check your login details and try again.')
+        return redirect(url_for('signup_post', form=form))
 
     return render_template('login.html', form=form)
 
@@ -198,3 +204,4 @@ admin.add_view(ModelView(UserPost, db.session))
 
 if __name__ == '__main__':
     app.run(debug=True)
+# app.run(host='0.0.0.0', port=4000)   http://localhost:4000/
