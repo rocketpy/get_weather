@@ -94,6 +94,7 @@ def signup():
     return render_template('signup.html')
 """
 
+
 @app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
     form = SignUp()
@@ -136,9 +137,9 @@ def login_post():
 
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
-        return render_template('login.html')
+        return redirect(url_for('signup_post', form=form))
 
-    return render_template('profile.html', form=form)
+    return render_template('login.html', form=form)
 
 
 @app.route('/weather')
