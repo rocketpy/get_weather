@@ -31,13 +31,13 @@ db.init_app(app)
 
 
 #  Models
-class User(db.Model):  # UserMixin
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     name = db.Column(db.String(20))
     surname = db.Column(db.String(20))
     sex = db.Column(db.String(6))
     email = db.Column(db.String(50), unique=True)
-    birthday = db.Column(db.DateTime)
+    birthday = db.Column(db.Date)
     password = db.Column(db.String(50))
 
 
@@ -52,13 +52,13 @@ class UserPost(db.Model):
     message = db.Column(db.Text)
 
 
-# Form models
+# Forms and validators
 class SignUp(FlaskForm):
     name = StringField('name', validators=[InputRequired(message='An name is required !'),
                                            Length(min=2, max=20)])
     surname = StringField('surname', validators=[InputRequired(message='An surname is required !'),
                                                  Length(min=2, max=20)])
-    sex = StringField('sex', validators=Length(min=4, max=6))
+    sex = StringField('sex', validators=[Length(min=4, max=6)])
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
                                              Length(min=10, max=50)])
     birthday = StringField('birthday')
@@ -110,7 +110,7 @@ def signup_post():
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
         flash('New user created !')
-#        return render_template('profile.html')
+        return render_template('profile.html')
 
     if user:
         flash('Email address already exists')
@@ -131,11 +131,10 @@ def login_post():
         login_user(user, remember=remember)
         flash('Logged in successfully.')
         return render_template('profile.html')
-#        return redirect(url_for('login_post', form=form))
 
     if not user or not check_password_hash(user.password, password):
         flash('Please check your login details and try again.')
-        return redirect(url_for('signup_post', form=form))
+        return render_template('login.html', form=form)
 
     return render_template('login.html', form=form)
 
