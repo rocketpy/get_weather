@@ -1,4 +1,3 @@
-import os
 from flask import Flask
 from flask_admin import Admin
 from flask_wtf import FlaskForm
@@ -13,28 +12,30 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required, current_user
 # from flask_bootstrap import Bootstrap
 
+
 app = Flask(__name__)
 
-# app.config.from_pyfile('config.py')
 admin = Admin(app)
-# SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
-# app.config['CSRF_ENABLED'] = True
+app.config['CSRF_ENABLED'] = True
+# app.config.from_pyfile('config.py')
 # app.config['USER_ENABLE_EMAIL'] = False
 # app.config['USER_APP_NAME'] = 'Flask_weather'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
 db.init_app(app)
 # Bootstrap(app)
+
 # style="background-image: url('{{ url_for('templates', filename='home.jpg') }}')"
 
 
+#  Models
 class User(db.Model):  # UserMixin
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     name = db.Column(db.String(20))
     surname = db.Column(db.String(20))
-    sex = db.Column(db.String(10))
+    sex = db.Column(db.String(6))
     email = db.Column(db.String(50), unique=True)
     birthday = db.Column(db.DateTime)
     password = db.Column(db.String(50))
@@ -51,15 +52,16 @@ class UserPost(db.Model):
     message = db.Column(db.Text)
 
 
+# Form models
 class SignUp(FlaskForm):
-    name = StringField('name', validators=[InputRequired(message='An name is required !')
-                                           , Length(min=2, max=20)])
+    name = StringField('name', validators=[InputRequired(message='An name is required !'),
+                                           Length(min=2, max=20)])
     surname = StringField('surname', validators=[InputRequired(message='An surname is required !'),
                                                  Length(min=2, max=20)])
     sex = StringField('sex', validators=Length(min=4, max=6))
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
                                              Length(min=10, max=50)])
-    birthday = StringField('birthday', Length(min=6, max=8))
+    birthday = StringField('birthday')
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
                                                      Length(max=50, message='Not greater a 50')])
 
@@ -77,6 +79,7 @@ class AddPostForm(FlaskForm):
     message = StringField('message', validators=[InputRequired(message='Text field is required !')])
 
 
+# Routes
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -86,17 +89,6 @@ def index():
 @login_required
 def profile():
     return render_template('profile.html', name=current_user.name)
-
-"""
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-
-@app.route('/signup')
-def signup():
-    return render_template('signup.html')
-"""
 
 
 @app.route('/signup', methods=['POST', 'GET'])
@@ -112,13 +104,13 @@ def signup_post():
     user = User.query.filter_by(email=email).first()
 
     if form.validate_on_submit():
-        new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
+        new_user = User(id=id, name=name, surname=surname, email=email, sex=sex, birthday=birthday,
                         password=generate_password_hash(password, method='sha256'))
-        # adding a new user to db
+
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
         flash('New user created !')
-        return render_template('profile.html')
+#        return render_template('profile.html')
 
     if user:
         flash('Email address already exists')
@@ -185,8 +177,8 @@ def logout():
     return render_template('index.html')
 
 
-# app.register_blueprint(auth)  # auth_blueprint
-# app.register_blueprint(main)  # main_blueprint
+# app.register_blueprint(auth)
+# app.register_blueprint(main)
 
 login_manager = LoginManager()
 login_manager.login_view = 'login.html'
