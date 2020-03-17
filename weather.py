@@ -132,9 +132,9 @@ def login_post():
         flash('Logged in successfully.')
         return render_template('profile.html')
 
-    if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
-        return render_template('login.html', form=form)
+#    if not user or not check_password_hash(user.password, password):
+#        flash('Please check your login details and try again.')
+#        return render_template('signup.html', form=form)
 
     return render_template('login.html', form=form)
 
