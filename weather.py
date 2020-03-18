@@ -11,6 +11,7 @@ from wtforms.validators import InputRequired, Length, DataRequired
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required, current_user
+# from .get_weather.get_weather.spiders import
 # from flask_bootstrap import Bootstrap
 
 
@@ -19,7 +20,7 @@ app = Flask(__name__)
 admin = Admin(app)
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
-app.config['CSRF_ENABLED'] = True
+app.config['CSRF_ENABLED'] = True  # False , for disable csrf protection
 # app.config.from_pyfile('config.py')
 # app.config['USER_ENABLE_EMAIL'] = False
 # app.config['USER_APP_NAME'] = 'Flask_weather'
@@ -69,9 +70,10 @@ class SignUp(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    email = StringField('email', validators=[InputRequired(message='An email is required !')])
+    email = StringField('email', validators=[InputRequired(message='An email is required !'),
+                                             Length(min=10, max=50)])
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
-                                                     Length(max=50, message='Not greater a 50')])
+                                                     Length(min=5, max=50, message='Not greater a 50')])
     remember = BooleanField('remember me')
 
 
@@ -98,9 +100,9 @@ def profile():
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
-    form = SignUp()
-    """
-    name = request.form.get('name')
+    form = SignUp()  # (csrf_enabled=False)
+
+    name = request.form.get('name')  # request.form['name']
     surname = request.form.get('surname')
     email = request.form.get('email')
     sex = request.form.get('sex')
@@ -108,17 +110,20 @@ def signup_post():
     password = request.form.get('password')
 
     user = User.query.filter_by(email=email).first()
-    """
-    if form.validate_on_submit():
-#        new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
-#                        password=generate_password_hash(password, method='sha256'))
-        new_user = User(name=form.name.data, surname=form.surname.data, email=form.email.data, sex=form.sex.data,
-                        birthday=form.birthday.data, password=generate_password_hash(form.password.data, method='sha256'))
+    if user:
+        flash('Email address already exists')
+        return render_template('login.html')
+
+    elif form.validate_on_submit():
+        new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
+                        password=generate_password_hash(password, method='sha256'))
+#       new_user = User(name=form.name.data, surname=form.surname.data, email=form.email.data, sex=form.sex.data,
+#                  birthday=form.birthday.data, password=generate_password_hash(form.password.data, method='sha256'))
 
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
         flash('New user created !')
-        return render_template('profile.html')
+        return render_template('profile.html')  # return redirect('/success')
 
 #    if user:
 #        flash('Email address already exists')
@@ -135,14 +140,18 @@ def login_post():
     remember = True if request.form.get('remember') else False
 
     user = User.query.filter_by(email=email).first()
-    if form.validate_on_submit():
+    if not user or not check_password_hash(user.password, password):
+        flash('Please check your login details and try again.')
+        return render_template('signup.html')
+
+    elif form.validate_on_submit():
         login_user(user, remember=remember)
         flash('Logged in successfully.')
         return render_template('profile.html')
 
 #    if not user or not check_password_hash(user.password, password):
 #        flash('Please check your login details and try again.')
-#        return render_template('signup.html', form=form)
+#        return render_template('signup.html')
 
     return render_template('login.html', form=form)
 
