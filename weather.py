@@ -1,4 +1,5 @@
 from flask import Flask
+from datetime import datetime
 from flask_admin import Admin
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
@@ -37,7 +38,7 @@ class User(db.Model, UserMixin):
     surname = db.Column(db.String(20))
     sex = db.Column(db.String(6))
     email = db.Column(db.String(50), unique=True)
-    birthday = db.Column(db.Date)
+    birthday = db.Column(db.DateTime)
     password = db.Column(db.String(50))
 
 
@@ -50,6 +51,7 @@ class UserPost(db.Model):
     name = db.Column(db.String(20))
     email = db.Column(db.String(50))
     message = db.Column(db.Text)
+    date_posted = db.Column(db.DateTime)
 
 
 # Forms and validators
@@ -157,15 +159,15 @@ def add_post():
         name = request.form['name']
         email = request.form['email']
         message = request.form['message']
-        new_post = UserPost(name=name, email=email, message=message)
+        new_post = UserPost(name=name, email=email, message=message, date_posted=datetime.now())
         db.session.add(new_post)
         db.session.commit()
         flash('Post added as successfully.')
-#        return render_template('posts.html', form=form)
+        return redirect(url_for('profile'))
 #    else:
 #        return render_template('post.html', form=form)
 
-    return render_template('post.html')
+    return render_template('post.html', form=form)
 
 
 @app.route('/posts')
