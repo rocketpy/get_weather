@@ -38,7 +38,7 @@ class User(db.Model, UserMixin):
     surname = db.Column(db.String(20))
     sex = db.Column(db.String(6))
     email = db.Column(db.String(50), unique=True)
-    birthday = db.Column(db.DateTime)
+    birthday = db.Column(db.String(8))
     password = db.Column(db.String(50))
 
 
@@ -50,7 +50,7 @@ class UserPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     email = db.Column(db.String(50))
-    message = db.Column(db.Text)
+    message = db.Column(db.Text(1000))
     date_posted = db.Column(db.DateTime)
 
 
@@ -60,25 +60,28 @@ class SignUp(FlaskForm):
                                            Length(min=2, max=20)])
     surname = StringField('surname', validators=[InputRequired(message='An surname is required !'),
                                                  Length(min=2, max=20)])
-    sex = StringField('sex', validators=[Length(min=4, max=6)])
+    sex = StringField('sex', validators=[Length(min=4, max=6, message='Not greater a 6 simbols')])
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
                                              Length(min=10, max=50)])
-    birthday = StringField('birthday')
+    birthday = StringField('birthday', validators=[Length(min=6, max=8, message='Not greater a 6 simbols')])
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
-                                                     Length(max=50, message='Not greater a 50')])
+                                                     Length(min=5, max=50, message='Not greater a 50')])
 
 
 class LoginForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(message='An email is required !')])
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
-                                                     Length(max=100, message='Not greater a 100')])
+                                                     Length(max=50, message='Not greater a 50')])
     remember = BooleanField('remember me')
 
 
 class AddPostForm(FlaskForm):
-    name = StringField('name', validators=[InputRequired(message='An name is required !')])
-    email = StringField('email', validators=[InputRequired(message='An email is required !')])
-    message = StringField('message', validators=[InputRequired(message='Text field is required !')])
+    name = StringField('name', validators=[InputRequired(message='An name is required !'),
+                                           Length(min=2, max=20)])
+    email = StringField('email', validators=[InputRequired(message='An email is required !'),
+                                             Length(min=10, max=50)])
+    message = StringField('message', validators=[InputRequired(message='Text field is required !'),
+                                                 Length(min=5, max=1000)])
 
 
 # Routes
@@ -164,8 +167,6 @@ def add_post():
         db.session.commit()
         flash('Post added as successfully.')
         return redirect(url_for('profile'))
-#    else:
-#        return render_template('post.html', form=form)
 
     return render_template('post.html', form=form)
 
