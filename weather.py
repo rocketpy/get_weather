@@ -31,7 +31,7 @@ db.init_app(app)
 
 
 #  Models
-class User(UserMixin, db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     name = db.Column(db.String(20))
     surname = db.Column(db.String(20))
@@ -94,6 +94,7 @@ def profile():
 @app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
     form = SignUp()
+    """
     name = request.form.get('name')
     surname = request.form.get('surname')
     email = request.form.get('email')
@@ -102,19 +103,21 @@ def signup_post():
     password = request.form.get('password')
 
     user = User.query.filter_by(email=email).first()
-
+    """
     if form.validate_on_submit():
-        new_user = User(id=id, name=name, surname=surname, email=email, sex=sex, birthday=birthday,
-                        password=generate_password_hash(password, method='sha256'))
+#        new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
+#                        password=generate_password_hash(password, method='sha256'))
+        new_user = User(name=form.name.data, surname=form.surname.data, email=form.email.data, sex=form.sex.data,
+                        birthday=form.birthday.data, password=generate_password_hash(form.password.data, method='sha256'))
 
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
         flash('New user created !')
         return render_template('profile.html')
 
-    if user:
-        flash('Email address already exists')
-        return render_template('login.html')
+#    if user:
+#        flash('Email address already exists')
+#        return render_template('login.html')
 
     return render_template('signup.html', form=form)
 
