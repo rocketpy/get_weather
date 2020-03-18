@@ -160,9 +160,12 @@ def add_post():
         new_post = UserPost(name=name, email=email, message=message)
         db.session.add(new_post)
         db.session.commit()
-        return render_template('posts.html', form=form)
-    else:
-        return render_template('post.html', form=form)
+        flash('Post added as successfully.')
+#        return render_template('posts.html', form=form)
+#    else:
+#        return render_template('post.html', form=form)
+
+    return render_template('post.html')
 
 
 @app.route('/posts')
