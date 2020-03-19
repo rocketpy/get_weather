@@ -52,7 +52,7 @@ class UserPost(db.Model):
     name = db.Column(db.String(20))
     email = db.Column(db.String(50))
     message = db.Column(db.Text(1000))
-    date_posted = db.Column(db.DateTime)
+#   date_posted = db.Column(db.DateTime)
 
 
 # Forms and validators
@@ -140,12 +140,13 @@ def login_post():
     remember = True if request.form.get('remember') else False
 
     user = User.query.filter_by(email=email).first()
-    if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again.')
-        return render_template('signup.html')
 
-    elif form.validate_on_submit():
+    if form.validate_on_submit():
         login_user(user, remember=remember)
+        if not user or not check_password_hash(user.password, password):
+            flash('Please check your login details and try again.')
+            return render_template('signup.html')
+
         flash('Logged in successfully.')
         return render_template('profile.html')
 
