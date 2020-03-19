@@ -39,7 +39,7 @@ class User(db.Model, UserMixin):
     surname = db.Column(db.String(20))
     sex = db.Column(db.String(6))
     email = db.Column(db.String(50), unique=True)
-    birthday = db.Column(db.String(8))
+    birthday = db.Column(db.String(10))
     password = db.Column(db.String(50))
 
 
@@ -64,7 +64,7 @@ class SignUp(FlaskForm):
     sex = StringField('sex', validators=[Length(min=4, max=6, message='Not greater a 6 simbols')])
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
                                              Length(min=10, max=50)])
-    birthday = StringField('birthday', validators=[Length(min=6, max=8, message='Not greater a 6 simbols')])
+    birthday = StringField('birthday', validators=[Length(min=6, max=10, message='Not greater a 6 simbols')])
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
                                                      Length(min=5, max=50, message='Not greater a 50')])
 
@@ -147,9 +147,9 @@ def login_post():
 
     if form.validate_on_submit():
         login_user(user, remember=remember)
-        if not user or not check_password_hash(user.password, password):
-            flash('Please check your login details and try again.')
-            return render_template('signup.html')
+#        if not user or not check_password_hash(user.password, password):
+#            flash('Please check your login details and try again.')
+#            return render_template('signup.html')
 
         flash('Logged in successfully.')
         return render_template('profile.html')
