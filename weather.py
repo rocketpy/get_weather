@@ -1,5 +1,5 @@
 from flask import Flask
-from datetime import datetime
+# from datetime import datetime
 from flask_admin import Admin
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
@@ -182,7 +182,7 @@ def add_post():
 @app.route('/posts')
 @login_required
 def post():
-    posts = UserPost.query.order_by(UserPost).all()
+    posts = UserPost.query.order_by(UserPost.message.desc()).all()
     return render_template('posts.html', post=posts)
 
 
