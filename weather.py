@@ -29,8 +29,6 @@ db = SQLAlchemy(app)
 db.init_app(app)
 # Bootstrap(app)
 
-# style="background-image: url('{{ url_for('templates', filename='home.jpg') }}')"
-
 
 #  Models
 class User(db.Model, UserMixin):
@@ -147,10 +145,6 @@ def login_post():
 
     if form.validate_on_submit():
         login_user(user, remember=remember)
-#        if not user or not check_password_hash(user.password, password):
-#            flash('Please check your login details and try again.')
-#            return render_template('signup.html')
-
         flash('Logged in successfully.')
         return render_template('profile.html')
 
@@ -176,7 +170,7 @@ def add_post():
         name = request.form['name']
         email = request.form['email']
         message = request.form['message']
-        new_post = UserPost(name=name, email=email, message=message, date_posted=datetime.now())
+        new_post = UserPost(name=name, email=email, message=message)  # date_posted=datetime.now()
         db.session.add(new_post)
         db.session.commit()
         flash('Post added as successfully.')
@@ -188,7 +182,7 @@ def add_post():
 @app.route('/posts')
 @login_required
 def post():
-    posts = UserPost.query.order_by(UserPost.date_posted.desc()).all()
+    posts = UserPost.query.order_by(UserPost).all()
     return render_template('posts.html', post=posts)
 
 
