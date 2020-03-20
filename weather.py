@@ -108,19 +108,13 @@ def signup_post():
     password = request.form.get('password')
 
     user = User.query.filter_by(email=email).first()
-#    if user:
-#        flash('Email address already exists')
-#        return render_template('login.html')
 
     if form.validate_on_submit():
         new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
                         password=generate_password_hash(password, method='sha256'))
         if user:
             flash('Email address already exists')
-            return render_template('login.html')
-
-#       new_user = User(name=form.name.data, surname=form.surname.data, email=form.email.data, sex=form.sex.data,
-#                  birthday=form.birthday.data, password=generate_password_hash(form.password.data, method='sha256'))
+            return render_template('login.html', form=form)
 
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
