@@ -152,7 +152,8 @@ def login_post():
 @app.route('/weather')
 @login_required
 def show_weather():
-
+    day_temperature = '+5'
+    night_temperature = '0'
     return render_template('weather.html')
 
 
