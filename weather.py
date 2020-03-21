@@ -172,8 +172,8 @@ def add_post():
 @app.route('/posts')
 @login_required
 def post():
-    posts = UserPost.query.order_by(UserPost.message.desc()).all()
-    return render_template('posts.html', post=posts)
+    posts = UserPost.query.all()
+    return render_template('posts.html', posts=posts)
 
 
 @app.route('/logout')
@@ -181,6 +181,16 @@ def post():
 def logout():
     logout_user()
     return render_template('index.html')
+
+
+@app.errorhandler(404)
+def not_found():
+    return render_template('404_error.html')
+
+
+@app.errorhandler(500)
+def not_found():
+    return render_template('500_error.html')
 
 
 # app.register_blueprint(auth)
