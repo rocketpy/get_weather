@@ -121,9 +121,6 @@ def signup_post():
         flash('New user created !')
         return render_template('profile.html')  # return redirect('/success')
 
-#    if user:
-#        flash('Email address already exists')
-#        return render_template('login.html')
 
     return render_template('signup.html', form=form)
 
