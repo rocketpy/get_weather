@@ -137,11 +137,11 @@ def login_post():
     if form.validate_on_submit():
         login_user(user, remember=remember)
         flash('Logged in successfully.')
-        return render_template('profile.html')
+        return redirect(url_for('add_post', form=form))
 
-#    if user or not check_password_hash(user.password, password):
-#        flash('Please check your login details and try again.')
-#        return render_template('signup.html')
+    if user:  # or not check_password_hash(user.password, password):
+        flash('Please check your login details and try again !')
+        return render_template('login.html', form=form)
 
     return render_template('login.html', form=form)
 
