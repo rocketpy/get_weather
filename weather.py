@@ -139,7 +139,7 @@ def login_post():
         flash('Logged in successfully.')
         return render_template('profile.html')
 
-#    if not user or not check_password_hash(user.password, password):
+#    if user or not check_password_hash(user.password, password):
 #        flash('Please check your login details and try again.')
 #        return render_template('signup.html')
 
@@ -164,7 +164,7 @@ def add_post():
         db.session.add(new_post)
         db.session.commit()
         flash('Post added as successfully.')
-        return redirect(url_for('profile'))
+        return redirect(url_for('add_post'))
 
     return render_template('post.html', form=form)
 
