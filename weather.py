@@ -184,13 +184,13 @@ def logout():
 
 
 @app.errorhandler(404)
-def not_found():
-    return render_template('404_error.html')
+def page_not_found(error):
+    return render_template('404_error.html', title='404'), 404
 
 
-@app.errorhandler(500)
-def not_found():
-    return render_template('500_error.html')
+# @app.errorhandler(500)
+# def not_found():
+#    return render_template('500_error.html', title='500')
 
 
 # app.register_blueprint(auth)
