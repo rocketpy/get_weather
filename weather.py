@@ -121,7 +121,6 @@ def signup_post():
         flash('New user created !')
         return render_template('profile.html')  # return redirect('/success')
 
-
     return render_template('signup.html', form=form)
 
 
@@ -188,9 +187,9 @@ def page_not_found(error):
     return render_template('404_error.html', title='404'), 404
 
 
-# @app.errorhandler(500)
-# def not_found():
-#    return render_template('500_error.html', title='500')
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500_error.html', title='500'), 500
 
 
 # app.register_blueprint(auth)
