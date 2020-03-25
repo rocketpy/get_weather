@@ -8,13 +8,13 @@ class MySpider(scrapy.Spider):
 
     def parse(self, response):
         items = GetWeatherItem()
-        # values = response.css('div.value')
+        values = response.css('div.value')
 
-        # for item in values:
-        night_temperature = response.css('span.unit.unit_temperature_c::text')[0].extract()
-        day_temperature = response.css('span.unit.unit_temperature_c::text')[1].extract()
+
+        night_temperature = values.css('span.unit.unit_temperature_c::text')[0].extract()
+        day_temperature = values.css('span.unit.unit_temperature_c::text')[1].extract()
 
         items['night_temperature'] = night_temperature
         items['day_temperature'] = day_temperature
 
-        yield items
+        #yield items
