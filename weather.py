@@ -150,6 +150,12 @@ def login_post():
 @app.route('/weather')
 @login_required
 def show_weather():
+    night_temperature = 0
+    day_temperature = 0
+
+    # from scrapy import cmdline
+    # cmdline.execute("scrapy crawl myspider".split())
+
     class MySpider(scrapy.Spider):
         name = "weather_spider"
         start_urls = ['https://www.gismeteo.ua/weather-zaporizhia-5093/']
