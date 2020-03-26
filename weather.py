@@ -164,14 +164,14 @@ def show_weather():
                 return night_temperature, day_temperature
 
         process = CrawlerProcess({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
-
         process.crawl(MySpider)
         process.start()
+        return render_template('weather.html', night_temperature=night_temperature, day_temperature=day_temperature)
+    return render_template('weather.html')
 
-        return render_template('weather.html', night_temperature=night_temperature,
-                           day_temperature=day_temperature)
-    # from scrapy import cmdline
-    # cmdline.execute("scrapy crawl myspider".split())
+# from scrapy import cmdline
+# cmdline.execute("scrapy crawl myspider".split())
+
 
 @app.route('/add', methods=['POST', 'GET'])
 @login_required
