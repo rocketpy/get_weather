@@ -1,5 +1,6 @@
 from flask import Flask
 import scrapy
+# import socketio
 from scrapy.crawler import CrawlerProcess
 # from scrapy.settings import CrawlerSettings
 from flask_admin import Admin
@@ -18,7 +19,8 @@ from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required
 
 
 app = Flask(__name__)
-
+# sio = socketio.AsyncServer()
+# sio.attach(app)
 admin = Admin(app)
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
@@ -147,9 +149,11 @@ def login_post():
     return render_template('login.html', form=form)
 
 
-@app.route('/weather',  methods=['POST', 'GET'])
+@app.route('/weather', methods=['GET', 'POST'])
 @login_required
 def show_weather():
+    night_temperature = []
+    day_temperature = []
     if request.method == 'POST':
 
         class MySpider(scrapy.Spider):
@@ -159,15 +163,16 @@ def show_weather():
 
             def parse(self, response):
                 values = response.css('div.value')
-                night_temperature = values.css('span.unit.unit_temperature_c::text')[0].extract()
-                day_temperature = values.css('span.unit.unit_temperature_c::text')[1].extract()
-                return night_temperature, day_temperature
+                night_temp = values.css('span.unit.unit_temperature_c::text')[0].extract()
+                day_temp = values.css('span.unit.unit_temperature_c::text')[1].extract()
+                night_temperature.append(night_temp)
+                day_temperature.append(day_temp)
 
         process = CrawlerProcess({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
         process.crawl(MySpider)
         process.start()
-        return render_template('weather.html', night_temperature=night_temperature, day_temperature=day_temperature)
-    return render_template('weather.html')
+
+    return render_template('weather.html', night_temperature=night_temperature[-1], day_temperature=day_temperature[-1])
 
 # from scrapy import cmdline
 # cmdline.execute("scrapy crawl myspider".split())
@@ -232,5 +237,8 @@ admin.add_view(ModelView(UserPost, db.session))
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
+
+# socketio.run(app, debug=True)
+# app.run(debug=False)
 # app.run(host='0.0.0.0', port=4000)   http://localhost:4000/
