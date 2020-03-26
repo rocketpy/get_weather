@@ -147,35 +147,31 @@ def login_post():
     return render_template('login.html', form=form)
 
 
-@app.route('/weather')
+@app.route('/weather',  methods=['POST', 'GET'])
 @login_required
 def show_weather():
-    night_temperature = 0
-    day_temperature = 0
+    if request.method == 'POST':
 
+        class MySpider(scrapy.Spider):
+            name = "weather_spider"
+            allowed_domains = ['gismeteo.ua']
+            start_urls = ['https://www.gismeteo.ua/weather-zaporizhia-5093/']
+
+            def parse(self, response):
+                values = response.css('div.value')
+                night_temperature = values.css('span.unit.unit_temperature_c::text')[0].extract()
+                day_temperature = values.css('span.unit.unit_temperature_c::text')[1].extract()
+                return night_temperature, day_temperature
+
+        process = CrawlerProcess({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
+
+        process.crawl(MySpider)
+        process.start()
+
+        return render_template('weather.html', night_temperature=night_temperature,
+                           day_temperature=day_temperature)
     # from scrapy import cmdline
     # cmdline.execute("scrapy crawl myspider".split())
-
-    class MySpider(scrapy.Spider):
-        name = "weather_spider"
-        start_urls = ['https://www.gismeteo.ua/weather-zaporizhia-5093/']
-
-        def parse(self, response):
-            values = response.css('div.value')
-            night_temperature = values.css('span.unit.unit_temperature_c::text')[0].extract()
-            day_temperature = values.css('span.unit.unit_temperature_c::text')[1].extract()
-            return night_temperature, day_temperature
-
-    process = CrawlerProcess({
-        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
-    })
-
-    process.crawl(MySpider)
-    process.start()
-
-    return render_template('weather.html', night_temperature=night_temperature,
-                           day_temperature=day_temperature)
-
 
 @app.route('/add', methods=['POST', 'GET'])
 @login_required
