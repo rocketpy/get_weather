@@ -1,25 +1,24 @@
-from flask import Flask
 import scrapy
-# import socketio
-from scrapy.crawler import CrawlerProcess
-# from scrapy.settings import CrawlerSettings
+from flask import Flask
 from flask_admin import Admin
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from scrapy.crawler import CrawlerProcess
 from wtforms import StringField, PasswordField, BooleanField
 from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
-from wtforms.validators import InputRequired, Length, DataRequired
+from wtforms.validators import InputRequired, Length
 from flask import render_template, redirect, url_for, request, flash
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required, current_user
-
+from werkzeug.security import generate_password_hash  # check_password_hash
+from flask_user import UserMixin, login_required, current_user
+# import socketio
+# from scrapy.settings import CrawlerSettings
 # from flask_bootstrap import Bootstrap
 
 
 app = Flask(__name__)
-# sio = socketio.AsyncServer()
+# sio = socketio.CrawlerSettings()
 # sio.attach(app)
 admin = Admin(app)
 app.config['SECRET_KEY'] = 'SECRET_KEY'
@@ -34,7 +33,6 @@ db.init_app(app)
 # Bootstrap(app)
 
 
-#  Models
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     name = db.Column(db.String(20))
@@ -45,10 +43,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(50))
 
 
-# db_adapter = SQLAlchemyAdapter(db, User)
-# user_manager = UserManager(db_adapter, app)
-
-
 class UserPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
@@ -57,7 +51,6 @@ class UserPost(db.Model):
 #   date_posted = db.Column(db.DateTime)
 
 
-# Forms and validators
 class SignUp(FlaskForm):
     name = StringField('name', validators=[InputRequired(message='An name is required !'),
                                            Length(min=2, max=20)])
@@ -123,7 +116,7 @@ def signup_post():
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
         flash('New user created !')
-        return render_template('profile.html')  # return redirect('/success')
+        return render_template('profile.html') 
 
     return render_template('signup.html', form=form)
 
@@ -154,7 +147,6 @@ def login_post():
 def show_weather():
     night_temperature = []
     day_temperature = []
-    #if request.method == 'POST'
 
     class MySpider(scrapy.Spider):
         name = "weather_spider"

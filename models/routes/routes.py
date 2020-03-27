@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash
 from flask_user import login_required, current_user
 
 
-# Routes
+
 @app.route('/')
 def index():
     return render_template('index.html')
