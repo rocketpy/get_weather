@@ -17,4 +17,3 @@ class UserPost(db.Model):
     name = db.Column(db.String(20))
     email = db.Column(db.String(50))
     message = db.Column(db.Text)
-

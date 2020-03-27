@@ -14,7 +14,7 @@ from wtforms.validators import InputRequired, Length, DataRequired
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_user import UserMixin, UserManager, SQLAlchemyAdapter, login_required, current_user
-# from .get_weather.get_weather.spiders import
+
 # from flask_bootstrap import Bootstrap
 
 
@@ -154,25 +154,26 @@ def login_post():
 def show_weather():
     night_temperature = []
     day_temperature = []
-    if request.method == 'POST':
+    #if request.method == 'POST'
 
-        class MySpider(scrapy.Spider):
-            name = "weather_spider"
-            allowed_domains = ['gismeteo.ua']
-            start_urls = ['https://www.gismeteo.ua/weather-zaporizhia-5093/']
+    class MySpider(scrapy.Spider):
+        name = "weather_spider"
+        allowed_domains = ['gismeteo.ua']
+        start_urls = ['https://www.gismeteo.ua/weather-zaporizhia-5093/']
 
-            def parse(self, response):
-                values = response.css('div.value')
-                night_temp = values.css('span.unit.unit_temperature_c::text')[0].extract()
-                day_temp = values.css('span.unit.unit_temperature_c::text')[1].extract()
-                night_temperature.append(night_temp)
-                day_temperature.append(day_temp)
+        def parse(self, response):
+            values = response.css('div.value')
+            night_temp = values.css('span.unit.unit_temperature_c::text')[0].extract()
+            day_temp = values.css('span.unit.unit_temperature_c::text')[1].extract()
+            night_temperature.append(night_temp)
+            day_temperature.append(day_temp)
 
-        process = CrawlerProcess({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
-        process.crawl(MySpider)
-        process.start()
+    process = CrawlerProcess({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
+    process.crawl(MySpider)
+    process.start()
 
-    return render_template('weather.html', night_temperature=night_temperature[-1], day_temperature=day_temperature[-1])
+    return render_template('weather.html', night_temperature=night_temperature[-1],
+                           day_temperature=day_temperature[-1])
 
 # from scrapy import cmdline
 # cmdline.execute("scrapy crawl myspider".split())
