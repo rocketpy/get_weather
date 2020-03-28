@@ -1,4 +1,6 @@
 import scrapy
+import requests
+from bs4 import BeautifulSoup
 from flask import Flask
 from flask_admin import Admin
 from flask_wtf import FlaskForm
@@ -149,6 +151,23 @@ def show_weather():
     night_temperature = []
     day_temperature = []
 
+    def get_html(url):
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'}
+        r = requests.get(url, headers=headers)
+        return r.text
+
+    def get_data(html):
+        soup = BeautifulSoup(html, 'lxml')
+        night_temp = soup.find_all('div', {'class': 'value'})[0].find('span', {'class': "unit unit_temperature_c"}).text
+        day_temp = soup.find_all('div', {'class': 'value'})[1].find('span', {'class': "unit unit_temperature_c"}).text
+        night_temperature.append(night_temp)
+        day_temperature.append(day_temp)
+
+    def main():
+        url = 'https://www.gismeteo.ua/weather-zaporizhia-5093/'
+        get_data(get_html(url))
+
+    """
     class MySpider(scrapy.Spider):
         name = "weather_spider"
         allowed_domains = ['gismeteo.ua']
@@ -164,12 +183,13 @@ def show_weather():
     process = CrawlerProcess({'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
     process.crawl(MySpider)
     process.start()
-
+    """
+    main()
     return render_template('weather.html', night_temperature=night_temperature[-1],
                            day_temperature=day_temperature[-1])
 
-# from scrapy import cmdline
-# cmdline.execute("scrapy crawl myspider".split())
+    # from scrapy import cmdline
+    # cmdline.execute("scrapy crawl myspider".split())
 
 
 @app.route('/add', methods=['POST', 'GET'])
