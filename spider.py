@@ -8,15 +8,15 @@ day_temperature = []
 
 
 def get_html(url):
-    useragnt = {'User-Agent': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'}
-    r = requests.get(url, useragent=useragnt)
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0'}
+    r = requests.get(url, headers=headers)
     return r.text
 
 
 def get_data(html):
     soup = BeautifulSoup(html, 'lxml')
-    night_temp = soup.find('div', id='home-welcome').find('header').find('h1').text
-    day_temp = soup.find('div', id='home-welcome').find('header').find('h1').text
+    night_temp = soup.find_all('div', {'class': 'value'})[0].find('span', {'class': "unit unit_temperature_c"}).text
+    day_temp = soup.find_all('div', {'class': 'value'})[1].find('span', {'class': "unit unit_temperature_c"}).text
     night_temperature.append(night_temp)
     day_temperature.append(day_temp)
     print(night_temperature[-1])
@@ -25,7 +25,7 @@ def get_data(html):
 
 def main():
     url = 'https://www.gismeteo.ua/weather-zaporizhia-5093/'
-    print(get_data(get_html(url)))
+    get_data(get_html(url))
 
 if __name__ == '__main__':
     main()
