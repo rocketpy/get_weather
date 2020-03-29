@@ -1,7 +1,7 @@
 import scrapy
 import requests
-from bs4 import BeautifulSoup
 from flask import Flask
+from bs4 import BeautifulSoup
 from flask_admin import Admin
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
@@ -10,7 +10,7 @@ from scrapy.crawler import CrawlerProcess
 from wtforms import StringField, PasswordField, BooleanField
 from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
-from wtforms.validators import InputRequired, Length, DataRequired
+from wtforms.validators import InputRequired, Length  # DataRequired
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash  # check_password_hash
 from flask_user import UserMixin, login_required, current_user
@@ -22,28 +22,29 @@ from flask_user import UserMixin, login_required, current_user
 app = Flask(__name__)
 
 admin = Admin(app)
+# app.config.from_pyfile('config.py')
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
-app.config['CSRF_ENABLED'] = True  # False , for disable csrf protection
-# app.config.from_pyfile('config.py')
-# app.config['USER_ENABLE_EMAIL'] = False
-# app.config['USER_APP_NAME'] = 'Flask_weather'
+app.config['CSRF_ENABLED'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
 db.init_app(app)
+# app.config['USER_ENABLE_EMAIL'] = False
+# app.config['USER_APP_NAME'] = 'Flask_weather'
 # sio = socketio.CrawlerSettings()
 # sio.attach(app)
 # Bootstrap(app)
 
 
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     surname = db.Column(db.String(20))
     sex = db.Column(db.String(6))
     email = db.Column(db.String(50), unique=True)
     birthday = db.Column(db.String(10))
     password = db.Column(db.String(50))
+    posts = db.relationship('UserPost', backref='author')
 
 
 class UserPost(db.Model):
@@ -51,7 +52,8 @@ class UserPost(db.Model):
     name = db.Column(db.String(20))
     email = db.Column(db.String(50))
     message = db.Column(db.Text(1000))
-#   date_posted = db.Column(db.DateTime)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    # date_posted = db.Column(db.DateTime)
 
 
 class SignUp(FlaskForm):
