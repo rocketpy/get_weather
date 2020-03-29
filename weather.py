@@ -215,6 +215,7 @@ def add_post():
 @login_required
 def post():
     posts = UserPost.query.all()
+    # posts = UserPosts.query.filter_by(name=current_user.name)
     return render_template('posts.html', posts=posts)
 
 
