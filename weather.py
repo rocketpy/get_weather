@@ -251,8 +251,7 @@ admin.add_view(ModelView(UserPost, db.session))
 
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
 
-# socketio.run(app, debug=True)
-# app.run(debug=False)
+# socketio.run(app, debug=False)
 # app.run(host='0.0.0.0', port=4000)   http://localhost:4000/
