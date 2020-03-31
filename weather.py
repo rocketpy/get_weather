@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from wtforms import StringField, PasswordField, BooleanField
 from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
-from wtforms.validators import InputRequired, Length  # DataRequired
+from wtforms.validators import InputRequired, Length
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash  # check_password_hash
 from flask_user import UserMixin, login_required, current_user
@@ -78,11 +78,11 @@ class LoginForm(FlaskForm):
 
 class AddPostForm(FlaskForm):
     name = StringField('name', validators=[InputRequired(message='An name is required !'),
-                                           Length(min=2, max=20)])
+                                           Length(min=2, max=20, message='Is a wrong length')])
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
-                                             Length(min=10, max=50)])
+                                             Length(min=10, max=50, message='It is a wrong length')])
     message = StringField('message', validators=[InputRequired(message='Text field is required !'),
-                                                 Length(min=5, max=1000)])
+                                                 Length(min=5, max=1000, message='It is a wrong length')])
 
 
 # Routes
@@ -99,7 +99,7 @@ def profile():
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
-    form = SignUp()  # (csrf_enabled=False)
+    form = SignUp()
 
     name = request.form.get('name')  # request.form['name']
     surname = request.form.get('surname')

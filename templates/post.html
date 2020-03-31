@@ -7,7 +7,7 @@
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="notification is-danger">
-                {{ messages[0] }}. Go to <a href="{{ url_for('post') }}">all posts</a>
+                {{ messages[0] }} Go to <a href="{{ url_for('post') }}">all posts</a>
             </div>
         {% endif %}
         {% endwith %}
@@ -15,17 +15,17 @@
             {{ form.csrf_token }}
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="text" name="name" placeholder="Your Name" autofocus="">
+                    <input class="input is-large" type="text" required id="name" name="name" placeholder="Your Name" autofocus="">
                 </div>
             </div>
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="email" name="email" placeholder="Your Email" autofocus="">
+                    <input class="input is-large" type="email" required id="email" name="email" placeholder="Your Email" autofocus="">
                 </div>
             </div>
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="text" name="message" placeholder="New message">
+                    <input class="input is-large" type="text" required id="message" name="message" placeholder="New message">
                 </div>
             </div>
             <button class="button is-block is-info is-large is-fullwidth" type="submit">Post new message </button>
