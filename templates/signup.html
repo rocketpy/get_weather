@@ -15,37 +15,37 @@
             {{ form.csrf_token }}
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="text" required id="name" name="name" placeholder="Name" autofocus="">
+                    <input class="input is-large" type="text" min="2" max="20" required id="name" name="name" placeholder="Name" autofocus="">
                 </div>
             </div>
 
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="text" required id="surname" name="surname" placeholder="Surname" autofocus="">
+                    <input class="input is-large" type="text" min="2" max="20" required id="surname" name="surname" placeholder="Surname" autofocus="">
                 </div>
             </div>
 
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="email" required id="email" name="email" placeholder="Email" autofocus="">
+                    <input class="input is-large" type="email" min="5" max="50" required id="email" name="email" placeholder="Email" autofocus="">
                 </div>
             </div>
 
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="text" name="sex" placeholder="Sex" autofocus="">
+                    <input class="input is-large" type="text" min="4" max="6" name="sex" placeholder="Sex" autofocus="">
                 </div>
             </div>
 
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="text" name="birthday" placeholder="Birthday" autofocus="">
+                    <input class="input is-large" type="text" min="6" max="10" name="birthday" placeholder="Birthday" autofocus="">
                 </div>
             </div>
 
             <div class="field">
                 <div class="control">
-                    <input class="input is-large" type="password" required id="password" name="password" placeholder="Password">
+                    <input class="input is-large" type="password" min="5" max="50" required id="password" name="password" placeholder="Password">
                 </div>
             </div>
 
