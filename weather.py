@@ -10,7 +10,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
 from wtforms.validators import InputRequired, Length
 from flask import render_template, redirect, url_for, request, flash
-from werkzeug.security import generate_password_hash  # check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_user import UserMixin, login_required, current_user
 # import scrapy
 # import socketio
@@ -78,7 +78,7 @@ class LoginForm(FlaskForm):
 
 class AddPostForm(FlaskForm):
     name = StringField('name', validators=[InputRequired(message='An name is required !'),
-                                           Length(min=2, max=20, message='Is a wrong length')])
+                                           Length(min=2, max=20, message='It is a wrong length')])
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
                                              Length(min=5, max=50, message='It is a wrong length')])
     message = StringField('message', validators=[InputRequired(message='Text field is required !'),
@@ -100,7 +100,6 @@ def profile():
 @app.route('/signup', methods=['POST', 'GET'])
 def signup_post():
     form = SignUp()
-
     name = request.form.get('name')  # request.form['name']
     surname = request.form.get('surname')
     email = request.form.get('email')
@@ -110,12 +109,13 @@ def signup_post():
 
     user = User.query.filter_by(email=email).first()
 
+    if user:
+        flash('Email address already exists')
+        return render_template('login.html', form=form)
+
     if form.validate_on_submit():
         new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
                         password=generate_password_hash(password, method='sha256'))
-        if user:
-            flash('Email address already exists')
-            return render_template('login.html', form=form)
 
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
@@ -134,14 +134,14 @@ def login_post():
 
     user = User.query.filter_by(email=email).first()
 
+    if not user or not check_password_hash(user.password, password):
+        flash('Please check your login details and try again !')
+        return render_template('login.html', form=form)
+
     if form.validate_on_submit():
         login_user(user, remember=remember)
         flash('Logged in successfully.')
         return redirect(url_for('add_post', form=form))
-
-    if user:  # or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again !')
-        return render_template('login.html', form=form)
 
     return render_template('login.html', form=form)
 
