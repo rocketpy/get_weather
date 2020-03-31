@@ -1,4 +1,3 @@
-import scrapy
 import requests
 from flask import Flask
 from bs4 import BeautifulSoup
@@ -6,7 +5,6 @@ from flask_admin import Admin
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from scrapy.crawler import CrawlerProcess
 from wtforms import StringField, PasswordField, BooleanField
 from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
@@ -14,7 +12,9 @@ from wtforms.validators import InputRequired, Length  # DataRequired
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash  # check_password_hash
 from flask_user import UserMixin, login_required, current_user
+# import scrapy
 # import socketio
+# from scrapy.crawler import CrawlerProcess
 # from scrapy.settings import CrawlerSettings
 # from flask_bootstrap import Bootstrap
 
@@ -53,7 +53,6 @@ class UserPost(db.Model):
     email = db.Column(db.String(50))
     message = db.Column(db.Text(1000))
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    # date_posted = db.Column(db.DateTime)
 
 
 class SignUp(FlaskForm):
@@ -202,11 +201,11 @@ def add_post():
         name = request.form['name']
         email = request.form['email']
         message = request.form['message']
-        new_post = UserPost(name=name, email=email, message=message)  # date_posted=datetime.now()
+        new_post = UserPost(name=name, email=email, message=message)
         db.session.add(new_post)
         db.session.commit()
         flash('Post added as successfully.')
-        return redirect(url_for('add_post'))
+        return redirect(url_for('add_post', form=form))
 
     return render_template('post.html', form=form)
 
