@@ -62,8 +62,10 @@ class SignUp(FlaskForm):
                                                  Length(min=2, max=20)])
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
                                              Length(min=5, max=50)])
-    sex = StringField('sex', validators=[Length(min=4, max=6, message='Not greater a 6 simbols')])
-    birthday = StringField('birthday', validators=[Length(min=6, max=10, message='Not greater a 6 simbols')])
+    sex = StringField('sex', validators=[InputRequired(message='Field sex is required !'),
+                                         Length(min=4, max=6, message='Not greater a 6 simbols')])
+    birthday = StringField('birthday', validators=[InputRequired(message='Field birthday is required !'),
+                                                   Length(min=6, max=10, message='Not greater a 6 simbols')])
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
                                                      Length(min=5, max=50, message='Not greater a 50')])
 
@@ -111,7 +113,7 @@ def signup_post():
 
     if user:
         # flash('Email address already exists')
-        return render_template('signup.html', form=form)
+        return render_template('login.html', form=form)
 
     if form.validate_on_submit():
         new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
@@ -119,7 +121,7 @@ def signup_post():
 
         db.session.add(new_user)  # adding a new user to db
         db.session.commit()
-        flash('New user created !')
+        flash('New user created , login please !')
         return redirect(url_for('login_post', form=form))
 
     return render_template('signup.html', form=form)
@@ -168,6 +170,7 @@ def show_weather():
         url = 'https://www.gismeteo.ua/weather-zaporizhia-5093/'
         get_data(get_html(url))
 
+    # by Scrapy
     """
     class MySpider(scrapy.Spider):
         name = "weather_spider"

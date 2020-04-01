@@ -4,14 +4,19 @@
 <h1 class="title">
   Weather in Zaporizhzhya for today
 </h1>
-    <form method="POST" action="{{ url_for('show_weather') }}">
-        <button class="button" type="submit">Update info</button>
-    </form>
+<div>
     <h2 class="subtitle">
     Day temperature : {{ day_temperature }}
     </h2>
     <h2 class="subtitle">
     Night temperature : {{ night_temperature }}
     </h2>
+</div>
+    <p>-</p>
+    <div>
+        <form method="POST" action="{{ url_for('show_weather') }}">
+            <button class="button" type="submit">Update info</button>
+        </form>
+    </div>
 {% endblock %}
 
