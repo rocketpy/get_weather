@@ -110,8 +110,8 @@ def signup_post():
     user = User.query.filter_by(email=email).first()
 
     if user:
-        flash('Email address already exists')
-        return render_template('login.html', form=form)
+        # flash('Email address already exists')
+        return render_template('signup.html', form=form)
 
     if form.validate_on_submit():
         new_user = User(name=name, surname=surname, email=email, sex=sex, birthday=birthday,
@@ -135,7 +135,7 @@ def login_post():
     user = User.query.filter_by(email=email).first()
 
     if not user or not check_password_hash(user.password, password):
-        flash('Please check your login details and try again !')
+        # flash('Please check your login details and try again !')
         return render_template('login.html', form=form)
 
     if form.validate_on_submit():
