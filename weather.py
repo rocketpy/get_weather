@@ -148,6 +148,27 @@ def login_post():
     return render_template('login.html', form=form)
 
 
+@app.route('/login_bootstrap', methods=['POST', 'GET'])
+def loginbootstrap():
+    form = LoginForm()
+    email = request.form.get('email')
+    password = request.form.get('password')
+    remember = True if request.form.get('remember') else False
+
+    user = User.query.filter_by(email=email).first()
+
+    if not user or not check_password_hash(user.password, password):
+        # flash('Please check your login details and try again !')
+        return render_template('login_bootstrap.html', form=form)
+
+    if form.validate_on_submit():
+        login_user(user, remember=remember)
+        flash('Logged in successfully.')
+        return redirect(url_for('add_post', form=form))
+
+    return render_template('login_bootstrap.html', form=form)
+
+
 @app.route('/weather', methods=['GET', 'POST'])
 @login_required
 def show_weather():
