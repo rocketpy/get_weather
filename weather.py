@@ -20,20 +20,18 @@ from flask_user import UserMixin, login_required, current_user
 
 
 app = Flask(__name__)
-
 admin = Admin(app)
-# app.config.from_pyfile('config.py')
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
 app.config['CSRF_ENABLED'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 db = SQLAlchemy(app)
 db.init_app(app)
+# app.config.from_pyfile('config.py')
 # app.config['USER_ENABLE_EMAIL'] = False
 # app.config['USER_APP_NAME'] = 'Flask_weather'
 # sio = socketio.CrawlerSettings()
 # sio.attach(app)
-# Bootstrap(app)
 
 
 class User(db.Model, UserMixin):
@@ -112,7 +110,7 @@ def signup_post():
     user = User.query.filter_by(email=email).first()
 
     if user:
-        # flash('Email address already exists')
+        flash('Email address already exists')
         return render_template('login.html', form=form)
 
     if form.validate_on_submit():
@@ -146,27 +144,6 @@ def login_post():
         return redirect(url_for('add_post', form=form))
 
     return render_template('login.html', form=form)
-
-
-@app.route('/login_bootstrap', methods=['POST', 'GET'])
-def loginbootstrap():
-    form = LoginForm()
-    email = request.form.get('email')
-    password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
-
-    user = User.query.filter_by(email=email).first()
-
-    if not user or not check_password_hash(user.password, password):
-        # flash('Please check your login details and try again !')
-        return render_template('login_bootstrap.html', form=form)
-
-    if form.validate_on_submit():
-        login_user(user, remember=remember)
-        flash('Logged in successfully.')
-        return redirect(url_for('add_post', form=form))
-
-    return render_template('login_bootstrap.html', form=form)
 
 
 @app.route('/weather', methods=['GET', 'POST'])
