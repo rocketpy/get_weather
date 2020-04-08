@@ -1,2 +1,3 @@
 # get_weather
-![](https://github.com/rocketpy/get_weather/tree/master/static/Image.jpg)
+
+![Image](https://github.com/rocketpy/get_weather/blob/master/static/Image.jpg)
