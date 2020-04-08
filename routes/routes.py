@@ -1,13 +1,16 @@
+from ..weather import app
+from ..weather import db
+from ..weather import admin
 import requests
 from bs4 import BeautifulSoup
 from flask_login import LoginManager
+from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
 from flask import render_template, redirect, url_for, request, flash
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_user import login_required, current_user
 from models.models import User, UserPost
 from forms.forms import SignUp, LoginForm, AddPostForm
-from ..weather import app
 
 
 @app.route('/')

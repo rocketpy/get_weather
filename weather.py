@@ -15,14 +15,18 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
+app.config.from_pyfile('config.py')
 admin = Admin(app)
+db = SQLAlchemy(app)
+db.init_app(app)
+
+"""
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
 app.config['CSRF_ENABLED'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-db = SQLAlchemy(app)
-db.init_app(app)
-# app.config.from_pyfile('config.py')
+"""
+
 
 """
 class User(db.Model, UserMixin):
@@ -220,4 +224,4 @@ admin.add_view(ModelView(UserPost, db.session))
 """
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
