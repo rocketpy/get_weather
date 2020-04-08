@@ -1,17 +1,17 @@
-import requests
+#import requests
 from flask import Flask
-from bs4 import BeautifulSoup
+#from bs4 import BeautifulSoup
 from flask_admin import Admin
-from flask_wtf import FlaskForm
-from flask_login import LoginManager
+#from flask_wtf import FlaskForm
+#from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from wtforms import StringField, PasswordField, BooleanField
-from flask_admin.contrib.sqla import ModelView
-from flask_login import login_user, logout_user
-from wtforms.validators import InputRequired, Length
-from flask import render_template, redirect, url_for, request, flash
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_user import UserMixin, login_required, current_user
+#from wtforms import StringField, PasswordField, BooleanField
+#from flask_admin.contrib.sqla import ModelView
+#from flask_login import login_user, logout_user
+#from wtforms.validators import InputRequired, Length
+#from flask import render_template, redirect, url_for, request, flash
+#from werkzeug.security import generate_password_hash, check_password_hash
+#from flask_user import UserMixin, login_required, current_user
 
 
 app = Flask(__name__)
@@ -24,13 +24,13 @@ db = SQLAlchemy(app)
 db.init_app(app)
 # app.config.from_pyfile('config.py')
 
-
+"""
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
     surname = db.Column(db.String(20))
     sex = db.Column(db.String(6))
-    email = db.Column(db.String(50), unique=True)
+    email = db.Column(db.String(255), unique=True)
     birthday = db.Column(db.String(10))
     password = db.Column(db.String(50))
     posts = db.relationship('UserPost', backref='author')
@@ -39,18 +39,18 @@ class User(db.Model, UserMixin):
 class UserPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
-    email = db.Column(db.String(50))
+    email = db.Column(db.String(255))
     message = db.Column(db.Text(1000))
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-
+"""
+"""
 class SignUp(FlaskForm):
     name = StringField('name', validators=[InputRequired(message='An name is required !'),
                                            Length(min=2, max=20)])
     surname = StringField('surname', validators=[InputRequired(message='An surname is required !'),
                                                  Length(min=2, max=20)])
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
-                                             Length(min=5, max=50)])
+                                             Length(min=5, max=255)])
     sex = StringField('sex', validators=[InputRequired(message='Field sex is required !'),
                                          Length(min=4, max=6, message='Not greater a 6 simbols')])
     birthday = StringField('birthday', validators=[InputRequired(message='Field birthday is required !'),
@@ -61,7 +61,7 @@ class SignUp(FlaskForm):
 
 class LoginForm(FlaskForm):
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
-                                             Length(min=5, max=50)])
+                                             Length(min=5, max=255)])
     password = PasswordField('password', validators=[InputRequired(message='A password is required !'),
                                                      Length(min=5, max=50, message='Not greater a 50')])
     remember = BooleanField('remember me')
@@ -71,11 +71,11 @@ class AddPostForm(FlaskForm):
     name = StringField('name', validators=[InputRequired(message='An name is required !'),
                                            Length(min=2, max=20, message='It is a wrong length')])
     email = StringField('email', validators=[InputRequired(message='An email is required !'),
-                                             Length(min=5, max=50, message='It is a wrong length')])
+                                             Length(min=5, max=255, message='It is a wrong length')])
     message = StringField('message', validators=[InputRequired(message='Text field is required !'),
                                                  Length(min=5, max=1000, message='It is a wrong length')])
-
-
+"""
+"""
 # Routes
 @app.route('/')
 def index():
@@ -217,7 +217,7 @@ def load_user(user_id):
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(UserPost, db.session))
-
+"""
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,4 +1,4 @@
-from get_weather.weather import db
+from ..weather import db
 from flask_login import UserMixin
 
 
