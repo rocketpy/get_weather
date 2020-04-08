@@ -1,2 +1,2 @@
 # get_weather
-![](Image.jpg)
+![](https://github.com/rocketpy/get_weather/tree/master/static/Image.jpg)
