@@ -12,6 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 #from flask import render_template, redirect, url_for, request, flash
 #from werkzeug.security import generate_password_hash, check_password_hash
 #from flask_user import UserMixin, login_required, current_user
+from .routes import routes
 
 
 app = Flask(__name__)
@@ -224,4 +225,4 @@ admin.add_view(ModelView(UserPost, db.session))
 """
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
