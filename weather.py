@@ -1,18 +1,20 @@
-#import requests
+import requests
 from flask import Flask
-#from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 from flask_admin import Admin
-#from flask_wtf import FlaskForm
-#from flask_login import LoginManager
+from flask_wtf import FlaskForm
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-#from wtforms import StringField, PasswordField, BooleanField
-#from flask_admin.contrib.sqla import ModelView
-#from flask_login import login_user, logout_user
-#from wtforms.validators import InputRequired, Length
-#from flask import render_template, redirect, url_for, request, flash
-#from werkzeug.security import generate_password_hash, check_password_hash
-#from flask_user import UserMixin, login_required, current_user
-from .routes import routes
+from wtforms import StringField, PasswordField, BooleanField
+from flask_admin.contrib.sqla import ModelView
+from flask_login import login_user, logout_user
+from wtforms.validators import InputRequired, Length
+from flask import render_template, redirect, url_for, request, flash
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_user import UserMixin, login_required, current_user
+# from .routes import routes
+# from .models import models
+# from .forms import forms
 
 
 app = Flask(__name__)
@@ -21,15 +23,13 @@ admin = Admin(app)
 db = SQLAlchemy(app)
 db.init_app(app)
 
-"""
+
 app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
 app.config['CSRF_ENABLED'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-"""
 
 
-"""
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
@@ -47,8 +47,8 @@ class UserPost(db.Model):
     email = db.Column(db.String(255))
     message = db.Column(db.Text(1000))
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-"""
-"""
+
+
 class SignUp(FlaskForm):
     name = StringField('name', validators=[InputRequired(message='An name is required !'),
                                            Length(min=2, max=20)])
@@ -79,8 +79,8 @@ class AddPostForm(FlaskForm):
                                              Length(min=5, max=255, message='It is a wrong length')])
     message = StringField('message', validators=[InputRequired(message='Text field is required !'),
                                                  Length(min=5, max=1000, message='It is a wrong length')])
-"""
-"""
+
+
 # Routes
 @app.route('/')
 def index():
@@ -222,7 +222,7 @@ def load_user(user_id):
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(UserPost, db.session))
-"""
+
 
 if __name__ == '__main__':
     app.run(debug=True)
