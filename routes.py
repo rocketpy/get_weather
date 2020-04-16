@@ -1,6 +1,6 @@
-from .weather import app
-from .weather import db
-from .weather import admin
+from .__init__ import app
+from .__init__ import db
+from .__init__ import admin
 import requests
 from bs4 import BeautifulSoup
 from flask_login import LoginManager
