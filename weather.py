@@ -12,9 +12,6 @@ from wtforms.validators import InputRequired, Length
 from flask import render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_user import UserMixin, login_required, current_user
-# from .routes import routes
-# from .models import models
-# from .forms import forms
 
 
 app = Flask(__name__)
@@ -28,6 +25,10 @@ app.config['SECRET_KEY'] = 'SECRET_KEY'
 app.config['WTF_CSRF_SECRET_KEY'] = "CSRF_SECRET_KEY"
 app.config['CSRF_ENABLED'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+
+# from routes import *
+# from models import *
+# from forms import *
 
 
 class User(db.Model, UserMixin):
