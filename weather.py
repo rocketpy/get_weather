@@ -5,6 +5,7 @@ from flask_admin import Admin
 from flask_wtf import FlaskForm
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Resource, Api
 from wtforms import StringField, PasswordField, BooleanField
 from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
@@ -15,6 +16,7 @@ from flask_user import UserMixin, login_required, current_user
 
 
 app = Flask(__name__)
+api = Api(app)
 app.config.from_pyfile('config.py')
 admin = Admin(app)
 db = SQLAlchemy(app)
