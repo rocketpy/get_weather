@@ -198,6 +198,11 @@ def post():
     return render_template('posts.html', posts=posts)
 
 
+@app.route('/user/<user_id>', methods=['GET'])
+def get_one_user():
+    return ''
+
+
 @app.route('/user', methods=['GET'])
 def get_all_users():
     return ''
@@ -205,6 +210,16 @@ def get_all_users():
 
 @app.route('/user', methods=['POST'])
 def create_user():
+    return ''
+
+
+@app.route('/user/<user_id>', methods=['PUT'])
+def promote_user():
+    return ''
+
+
+@app.route('/user', methods=['DELETE'])
+def delete_user():
     return ''
 
 
