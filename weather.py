@@ -198,6 +198,16 @@ def post():
     return render_template('posts.html', posts=posts)
 
 
+@app.route('/user', methods=['GET'])
+def get_all_users():
+    return ''
+
+
+@app.route('/user', methods=['POST'])
+def create_user():
+    return ''
+
+
 @app.route('/logout')
 @login_required
 def logout():
