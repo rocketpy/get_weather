@@ -207,7 +207,16 @@ def get_one_user():
 
 @app.route('/user', methods=['GET'])
 def get_all_users():
-    return ''
+    all_users = User.query.all()
+    result = []
+    for user in all_users:
+        user_data = {}
+        user_data['public_id'] = user.public_id
+        user_data['name'] = user.name
+        user_data['password'] = user.password
+        user_data['admin'] = user.admin
+        result.append(user_data)
+    return jsonify({'all_users': 'result'})
 
 
 @app.route('/user', methods=['POST'])
