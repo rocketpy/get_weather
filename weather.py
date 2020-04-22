@@ -1,5 +1,7 @@
+import jwt
 import uuid
 import requests
+import datetime
 from flask import Flask
 from bs4 import BeautifulSoup
 from flask_admin import Admin
@@ -12,7 +14,7 @@ from wtforms import StringField, PasswordField, BooleanField
 from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
 from wtforms.validators import InputRequired, Length
-from flask import render_template, redirect, url_for, request, flash, jsonify
+from flask import render_template, redirect, url_for, request, flash, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_user import UserMixin, login_required, current_user
 
@@ -200,6 +202,24 @@ def post():
     return render_template('posts.html', posts=posts)
 
 
+@app.route('/login')
+def login():
+    auth = request.authorization
+    if not auth or not auth.username or not auth.password:
+        return make_response('Could not verify !', 401, {'WWW-Authenticate': 'Basic realm="Login required !"'})
+    
+    user = User.query.filter_by(name=auth.username).first()
+    if not user:
+        return make_response('Could not verify !', 401, {'WWW-Authenticate': 'Basic realm="Login required !"'})
+
+    if check_password_hash(user.password, auth.password):
+        token = jwt.encode({'public_id': 'user.public_id', 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)},
+                           app.config['SECRET_KEY'])
+        return jsonify({'token': token.decode('UTF-8')})
+    
+    return make_response('Could not verify !', 401, {'WWW-Authenticate': 'Basic realm="Login required !"'})
+    
+    
 @app.route('/user/<public_id>', methods=['GET'])
 def get_one_user(public_id):
     user = User.query.filter_by(public_id=public_id).first()
