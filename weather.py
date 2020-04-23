@@ -97,8 +97,15 @@ def index():
 
 
 def token_required(t):
+    @wraps(t)
+    def decoretad(*args, **qwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+            
+        if not token:
+            return jsonify({'message': 'The token is a missed !'}), 401
     
-
 
 @app.route('/profile')
 @login_required
