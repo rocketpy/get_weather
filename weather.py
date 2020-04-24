@@ -259,6 +259,8 @@ def get_one_user(current_user, public_id):
 @app.route('/user', methods=['GET'])
 @token_required
 def get_all_users(current_user):
+    if not current_user.admin:
+        return jsonify({'message': 'Cannot perform this function !'})
     all_users = User.query.all()
     result = []
     for user in all_users:
