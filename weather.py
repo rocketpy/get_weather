@@ -224,7 +224,7 @@ def post():
     return render_template('posts.html', posts=posts)
 
 
-@app.route('/login')
+@app.route('/log_in')
 def login():
     auth = request.authorization
     if not auth or not auth.username or not auth.password:
@@ -240,6 +240,31 @@ def login():
         return jsonify({'token': token.decode('UTF-8')})
     
     return make_response('Could not verify !', 401, {'WWW-Authenticate': 'Basic realm="Login required !"'})
+
+
+@app.route('/todo', methods=['GET'])
+def get_all_todos():
+    return ''
+
+
+@app.route('/todo/<todo_id>', methods=['GET'])
+def get_one_todo(todo_id):
+    return ''
+    
+
+@app.route('/todo', methods=['POST'])
+def create_todo():
+    return ''
+    
+    
+@app.route('/todo/<todo_id>', methods=['PUT'])
+def update_todo(todo_id):
+    return ''
+    
+    
+@app.route('/todo', methods=['GET'])
+def get_all_todos():
+    return ''
     
     
 @app.route('/user/<public_id>', methods=['GET'])
