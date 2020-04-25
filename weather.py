@@ -259,7 +259,10 @@ def get_all_todos(current_user):
 @app.route('/todo/<todo_id>', methods=['GET'])
 @token_required
 def get_one_todo(current_id, todo_id):
-    return ''
+    todo = Todo.query.filter_by(id=todo_id, user_id=current_user.id).first()
+    if not todo:
+        return jsonify({'message': 'Not found todo !'})
+    return 
     
 
 @app.route('/todo', methods=['POST'])
