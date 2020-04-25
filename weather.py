@@ -294,7 +294,12 @@ def update_todo(current_user, todo_id):
 @app.route('/todo/<todo_id>', methods=['DELETE'])
 @token_required
 def delete_todo(current_user, todo_id):
-    return ''
+    todo = Todo.query.filter_by(id=todo_id, user_id=current_user.id).first()
+    if not todo:
+        return jsonify({'message': 'Not found todo !'})
+    db.session.delete(todo)
+    db.session.commit()
+    return jsonify({'message': 'Todo item is deleted !'})
     
     
 @app.route('/user/<public_id>', methods=['GET'])
