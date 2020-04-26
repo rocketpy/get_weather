@@ -56,6 +56,13 @@ class UserPost(db.Model):
     email = db.Column(db.String(255))
     message = db.Column(db.Text(1000))
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+    
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(50))
+    comlete = db.Column(db.Boolean)
+    user_id = db.Column(db.Integer)
 
 
 class SignUp(FlaskForm):
