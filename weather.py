@@ -173,6 +173,7 @@ def login_post():
 
     if form.validate_on_submit():
         login_user(user, remember=remember)
+        session['user_id'] = user.id
         flash('Logged in successfully.')
         return redirect(url_for('add_post', form=form))
 
