@@ -14,7 +14,7 @@ from wtforms import StringField, PasswordField, BooleanField
 from flask_admin.contrib.sqla import ModelView
 from flask_login import login_user, logout_user
 from wtforms.validators import InputRequired, Length
-from flask import render_template, redirect, url_for, request, flash, jsonify, make_response
+from flask import render_template, redirect, url_for, request, flash, jsonify, make_response, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_user import UserMixin, login_required, current_user
 from functools import wraps
